@@ -3,10 +3,10 @@ import fs from 'fs';
 import { series } from 'async'
 import Geocoder from '@mapbox/mapbox-sdk/services/geocoding';
 
-import { DISTANCE_MILES } from '../constants';
+import { DISTANCE_MILES, MAPBOX_TOKEN } from '../constants';
 import { getFilePath } from './utils';
 
-const geocoder = Geocoder({ accessToken: 'pk.eyJ1IjoiamNzYW5mb3JkIiwiYSI6ImNrcmYyejJwMzA1ZW0yb29kcGd2aXYzNm8ifQ.Xb6PPg3uG0WCgVffY1xTlg' });
+const geocoder = Geocoder({ accessToken: MAPBOX_TOKEN });
 
 type CB = (error: Error | null, results: any) => void;
 

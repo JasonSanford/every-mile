@@ -5,36 +5,50 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
 const async_1 = require("async");
-const elevation_finder_1 = __importDefault(require("../elevation_finder"));
+const elevation_1 = require("../elevation");
+const constants_1 = require("../constants");
 const utils_1 = require("./utils");
-// const geocoder = Geocoder({ accessToken: 'pk.eyJ1IjoiamNzYW5mb3JkIiwiYSI6ImNrcmYyejJwMzA1ZW0yb29kcGd2aXYzNm8ifQ.Xb6PPg3uG0WCgVffY1xTlg' });
-const elevationFinder = new elevation_finder_1.default();
 const tasks = [];
-for (let mile = 1; mile <= 3; mile++) {
+for (let mile = 401; mile <= constants_1.DISTANCE_MILES; mile++) {
     tasks.push((cb) => {
-        setTimeout(async () => {
+        setTimeout(() => {
             console.log(`Processing mile ${mile}`);
             const filePath = utils_1.getFilePath(mile);
             const file = fs_1.default.readFileSync(filePath);
             const section = JSON.parse(file.toString());
-            const [longitude, latitude] = section.geometry.coordinates[0];
-            const elevation = await elevationFinder.getElevation(latitude, longitude);
-            console.log(elevation);
-            // const elevations = section.geometry.coordinates.map(coordinate => {
-            //   const [longitude, latitude] = coordinate;
-            //   elevationFinder.getElevation(latitude, longitude);
-            // });
-            // const response = await geocoder.reverseGeocode({query: section.geometry.coordinates[0]}).send();
-            // section.properties.geocode = response.body.features;
-            // fs.writeFileSync(filePath, JSON.stringify(section));
-            cb(null, mile);
+            const elevationTasks = section.geometry.coordinates.map((coordinate) => {
+                return (cb) => {
+                    setTimeout(async () => {
+                        const [longitude, latitude] = coordinate;
+                        try {
+                            let elevation = await elevation_1.getElevation(latitude, longitude);
+                            elevation = parseFloat(elevation.toFixed(1));
+                            cb(null, elevation);
+                        }
+                        catch (error) {
+                            console.log('Error getting elevation', error);
+                            // Some elevation errors are ok, just add a null entry.
+                            cb(null, null);
+                        }
+                    }, 20);
+                };
+            });
+            async_1.series(elevationTasks, (error, elevationResults) => {
+                if (error) {
+                    console.log('error', error);
+                    return;
+                }
+                section.properties.elevations = elevationResults;
+                fs_1.default.writeFileSync(filePath, JSON.stringify(section));
+                cb(null, elevationResults);
+            });
         }, 4000);
     });
 }
 async_1.series(tasks, (error, results) => {
     if (error) {
-        console.log('errror', error);
+        console.log('error', error);
         return;
     }
-    console.log(results);
+    console.log(results.length);
 });

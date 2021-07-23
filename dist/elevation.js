@@ -21,7 +21,7 @@ const getImageTile = async (x, y) => {
         fs_1.default.readFileSync(filePath);
         return;
     }
-    console.log('Cache miss');
+    console.log('Cache miss', filePath);
     const urlFileName = `${Z}/${x}/${y}.pngraw`;
     const url = `https://api.mapbox.com/v4/mapbox.terrain-rgb/${urlFileName}?access_token=${constants_1.MAPBOX_TOKEN}`;
     const response = await node_fetch_1.default(url);

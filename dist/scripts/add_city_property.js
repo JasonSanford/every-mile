@@ -8,7 +8,7 @@ const async_1 = require("async");
 const geocoding_1 = __importDefault(require("@mapbox/mapbox-sdk/services/geocoding"));
 const constants_1 = require("../constants");
 const utils_1 = require("./utils");
-const geocoder = geocoding_1.default({ accessToken: 'pk.eyJ1IjoiamNzYW5mb3JkIiwiYSI6ImNrcmYyejJwMzA1ZW0yb29kcGd2aXYzNm8ifQ.Xb6PPg3uG0WCgVffY1xTlg' });
+const geocoder = geocoding_1.default({ accessToken: constants_1.MAPBOX_TOKEN });
 const tasks = [];
 for (let mile = 1; mile <= constants_1.DISTANCE_MILES; mile++) {
     tasks.push((cb) => {
