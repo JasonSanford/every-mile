@@ -11,14 +11,18 @@
   "license": "ISC",
   "devDependencies": {
     "@types/async": "^3.2.7",
+    "@types/get-pixels": "^3.3.1",
     "@types/mapbox__mapbox-sdk": "^0.13.2",
+    "@types/mapbox__tilebelt": "^1.0.0",
     "@types/node": "^16.4.0",
     "typescript": "^4.3.5"
   },
   "dependencies": {
     "@mapbox/mapbox-sdk": "^0.13.0",
+    "@mapbox/tilebelt": "^1.0.2",
     "@turf/along": "^6.5.0",
     "@turf/line-split": "^6.5.0",
-    "async": "^3.2.0"
+    "async": "^3.2.0",
+    "get-pixels": "^3.3.3"
   }
 }
