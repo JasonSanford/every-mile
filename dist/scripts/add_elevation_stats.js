@@ -10,6 +10,10 @@ let mostGain = 0;
 let mostGainMile = 1;
 let leastGain = 999;
 let leastGainMile = 1;
+let highestElevation = 0;
+let highestElevationMile = 1;
+let lowestElevation = 999;
+let lowestElevationMile = 1;
 for (let mile = 1; mile <= constants_1.DISTANCE_MILES; mile++) {
     console.log(`Processing mile ${mile}`);
     const filePath = utils_1.getFilePath(mile);
@@ -33,7 +37,17 @@ for (let mile = 1; mile <= constants_1.DISTANCE_MILES; mile++) {
         leastGain = elevationDifference;
         leastGainMile = mile;
     }
+    if (minElevation < lowestElevation) {
+        lowestElevation = minElevation;
+        lowestElevationMile = mile;
+    }
+    if (maxElevation > highestElevation) {
+        highestElevation = maxElevation;
+        highestElevationMile = mile;
+    }
     fs_1.default.writeFileSync(filePath, JSON.stringify(section));
 }
 console.log(`Most gain mile: ${mostGainMile} (${mostGain})`);
 console.log(`Least gain mile: ${leastGainMile} (${leastGain})`);
+console.log(`Lowest elevation mile: ${lowestElevationMile} (${lowestElevation})`);
+console.log(`Highest elevation mile: ${highestElevationMile} (${highestElevation})`);
