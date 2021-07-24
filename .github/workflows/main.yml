@@ -1,0 +1,23 @@
+name: Tweeter
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          ref: ${{ github.head_ref }}
+      - run: node dist/scripts/tweet_a_mile.js
+      - run: |
+          git config --global user.name 'Jason Sanford'
+          git config --global user.email 'jasonsanford@gmail.com'
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git commit -am "Tweeted"
+          git push
