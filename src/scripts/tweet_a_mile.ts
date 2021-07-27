@@ -23,12 +23,12 @@ for (let mile = 1; mile <= DISTANCE_MILES; mile++) {
   if (!section.properties.has_tweeted) {
     console.log(`Tweet mile ${mile}`);
     section.properties.has_tweeted = true;
-    fs.writeFileSync(filePath, JSON.stringify(section));
-      client.post("statuses/update", {
-        status: `Hello world ${mile}`
-      })
-      .then(resp => console.log(resp))
-      .catch(err => console.log(err));
+    // fs.writeFileSync(filePath, JSON.stringify(section));
+    //   client.post("statuses/update", {
+    //     status: `Hello world ${mile}`
+    //   })
+    //   .then(resp => console.log(resp))
+    //   .catch(err => console.log(err));
     break;
   }
 }
