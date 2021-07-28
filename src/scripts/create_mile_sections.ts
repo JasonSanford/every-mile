@@ -18,7 +18,7 @@ while (mile <= DISTANCE_MILES) {
   const splitPoint = along(parkway, mile, { units: 'miles' });
   [currentSection, nextSection] = split(nextSection, splitPoint).features;
 
-  fs.writeFileSync(getFilePath(mile), JSON.stringify(currentSection));
+  fs.writeFileSync(getFilePath(mile, 'geojson'), JSON.stringify(currentSection));
 
   currentSection = nextSection;
   mile++;

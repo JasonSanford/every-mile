@@ -17,7 +17,7 @@ const client = new twitter_lite_1.default({
 });
 for (let mile = 1; mile <= constants_1.DISTANCE_MILES; mile++) {
     console.log(`Processing mile ${mile}`);
-    const filePath = utils_1.getFilePath(mile);
+    const filePath = utils_1.getFilePath(mile, 'geojson');
     const file = fs_1.default.readFileSync(filePath);
     const section = JSON.parse(file.toString());
     if (!section.properties.has_tweeted) {

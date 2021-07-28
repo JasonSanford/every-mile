@@ -15,7 +15,7 @@ for (let mile = 401; mile <= DISTANCE_MILES; mile++) {
     setTimeout(() => {
       console.log(`Processing mile ${mile}`);
 
-      const filePath = getFilePath(mile);
+      const filePath = getFilePath(mile, 'geojson');
       const file = fs.readFileSync(filePath);
       const section = JSON.parse(file.toString());
 

@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-import { series } from 'async'
+import { series } from 'async';
 import Geocoder from '@mapbox/mapbox-sdk/services/geocoding';
 
 import { DISTANCE_MILES, MAPBOX_TOKEN } from '../constants';
@@ -16,7 +16,7 @@ for (let mile = 1; mile <= DISTANCE_MILES; mile++) {
   tasks.push((cb: CB) => {
     setTimeout(async () => {
       console.log(`Processing mile ${mile}`);
-      const filePath = getFilePath(mile);
+      const filePath = getFilePath(mile, 'geojson');
       const file = fs.readFileSync(filePath);
       const section = JSON.parse(file.toString());
       const response = await geocoder.reverseGeocode({query: section.geometry.coordinates[0]}).send();

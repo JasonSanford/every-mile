@@ -14,6 +14,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           ref: ${{ github.head_ref }}
+      - run: npm install
       - run: node dist/scripts/tweet_a_mile.js
       - run: |
           git config --global user.name 'Jason Sanford'

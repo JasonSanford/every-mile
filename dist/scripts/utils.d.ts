@@ -1,2 +1,2 @@
-declare const getFilePath: (mile: number) => string;
+declare const getFilePath: (mile: number, extension: string) => string;
 export { getFilePath };

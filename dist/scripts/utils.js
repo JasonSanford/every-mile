@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getFilePath = void 0;
-const getFilePath = (mile) => {
-    const fileName = `mile_${mile.toString().padStart(3, '0')}.geojson`;
-    return `${__dirname}/../../geom/${fileName}`;
+const getFilePath = (mile, extension) => {
+    const directory = extension === 'geojson' ? 'geom' : 'images';
+    const fileName = `mile_${mile.toString().padStart(3, '0')}.${extension}`;
+    return `${__dirname}/../../${directory}/${fileName}`;
 };
 exports.getFilePath = getFilePath;
