@@ -12,14 +12,14 @@ type CB = (error: Error | null, results: any) => void;
 
 const access_token = 'pk.eyJ1IjoiamNzYW5mb3JkIiwiYSI6ImNrZG1kdnU5NzE3bG4yenBkbzU5bDQ2NXMifQ.IMquilPKSANQDaSzf3fjcg';
 const before_layer = 'contour-line';
-const padding = '99';
+const padding = '100';
 const mapId = 'jcsanford/ckrm3rsr78uiq17q31yhwzul2';
 const dimensions = '700x450';
 const params = { padding, before_layer, access_token };
 
 const tasks = [];
 
-for (let mile = 201; mile <= 300; mile++) {
+for (let mile = 400; mile <= DISTANCE_MILES; mile++) {
   tasks.push((cb: CB) => {
     setTimeout(async () => {
       console.log(`Processing mile ${mile}`);
