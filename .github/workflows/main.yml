@@ -6,17 +6,21 @@ on:
   workflow_dispatch:
 
 jobs:
-  notify:
+  tweet:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - name: Node it
+        uses: actions/setup-node@v2
         with:
           ref: ${{ github.head_ref }}
-      - run: npm install
-      - run: node dist/scripts/tweet_a_mile.js
-      - run: |
+      - name: Install it
+        run: npm install
+      - name: Tweet it
+        run: node dist/scripts/tweet_a_mile.js
+      - name: Commit it
+        run: |
           git config --global user.name 'Jason Sanford'
           git config --global user.email 'jasonsanford@gmail.com'
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
