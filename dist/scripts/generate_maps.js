@@ -12,12 +12,12 @@ const polyline_1 = __importDefault(require("@mapbox/polyline"));
 const utils_1 = require("./utils");
 const access_token = 'pk.eyJ1IjoiamNzYW5mb3JkIiwiYSI6ImNrZG1kdnU5NzE3bG4yenBkbzU5bDQ2NXMifQ.IMquilPKSANQDaSzf3fjcg';
 const before_layer = 'contour-line';
-const padding = '98';
+const padding = '99';
 const mapId = 'jcsanford/ckrm3rsr78uiq17q31yhwzul2';
 const dimensions = '700x450';
 const params = { padding, before_layer, access_token };
 const tasks = [];
-for (let mile = 1; mile <= 100; mile++) {
+for (let mile = 54; mile <= 54; mile++) {
     tasks.push((cb) => {
         setTimeout(async () => {
             console.log(`Processing mile ${mile}`);
