@@ -11,15 +11,15 @@ import { getFilePath } from './utils';
 type CB = (error: Error | null, results: any) => void;
 
 const access_token = 'pk.eyJ1IjoiamNzYW5mb3JkIiwiYSI6ImNrZG1kdnU5NzE3bG4yenBkbzU5bDQ2NXMifQ.IMquilPKSANQDaSzf3fjcg';
-const before_layer = 'road-secondary-tertiary';
-const padding = '120';
+const before_layer = 'contour-line';
+const padding = '98';
 const mapId = 'jcsanford/ckrm3rsr78uiq17q31yhwzul2';
 const dimensions = '700x450';
 const params = { padding, before_layer, access_token };
 
 const tasks = [];
 
-for (let mile = 300; mile <= 310; mile++) {
+for (let mile = 1; mile <= DISTANCE_MILES; mile++) {
   tasks.push((cb: CB) => {
     setTimeout(async () => {
       console.log(`Processing mile ${mile}`);
@@ -28,18 +28,12 @@ for (let mile = 300; mile <= 310; mile++) {
       const section = JSON.parse(file.toString());
       const bufferedLineAsPolygon = turfBuffer(section.geometry, 0.075);
       const bufferedLineAsLine = polygonToLine(bufferedLineAsPolygon);
-      // console.log(JSON.stringify(bufferedLineAsLine))
       // @ts-ignore
       const corrected = bufferedLineAsLine.geometry.coordinates.map(([lng, lat]) => [lat, lng]);
       // @ts-ignore
       const encodedLine = polyline.encode(corrected, 5);
-      // console.log(encodedLine);
-      // console.log(JSON.stringify(bufferedLine));
-      // cb(null, 'hey');
-      // return;
       const path = `path-2+999999-1+999999-0.4(${encodeURIComponent(encodedLine)})`;
       const url = `https://api.mapbox.com/styles/v1/${mapId}/static/${path}/auto/${dimensions}@2x?${(new URLSearchParams(params))}`;
-      // console.log(url);
       const response = await fetch(url);
       const buffer = await response.buffer();
       fs.writeFileSync(getFilePath(mile, 'png'), buffer);
