@@ -19,7 +19,7 @@ const params = { padding, before_layer, access_token };
 
 const tasks = [];
 
-for (let mile = 1; mile <= DISTANCE_MILES; mile++) {
+for (let mile = 1; mile <= 100; mile++) {
   tasks.push((cb: CB) => {
     setTimeout(async () => {
       console.log(`Processing mile ${mile}`);
@@ -38,7 +38,7 @@ for (let mile = 1; mile <= DISTANCE_MILES; mile++) {
       const buffer = await response.buffer();
       fs.writeFileSync(getFilePath(mile, 'png'), buffer);
       cb(null, mile);
-    }, 2000);
+    }, 4000);
   });
 }
 
