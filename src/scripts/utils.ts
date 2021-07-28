@@ -4,4 +4,8 @@ const getFilePath = (mile: number, extension: string) => {
   return `${__dirname}/../../${directory}/${fileName}`;
 };
 
-export { getFilePath };
+const metersToFeet = (meters: number) => {
+  return meters * 3.28084;
+}
+
+export { getFilePath, metersToFeet };

@@ -4,31 +4,50 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
-const twitter_lite_1 = __importDefault(require("twitter-lite"));
+const twitter_api_v2_1 = __importDefault(require("twitter-api-v2"));
 const constants_1 = require("../constants");
 const utils_1 = require("./utils");
-const client = new twitter_lite_1.default({
-    // subdomain: "api", // "api" is the default (change for other subdomains)
-    // version: "1.1", // version "1.1" is the default (change for other subdomains)
-    consumer_key: 'U6fkvXwsiznoaFXTXZlwCHCHv',
-    consumer_secret: 'JK4WB2oWB7EI5652Ifi6zxC6EncQILVJ6ZXq7VsUmvDuZKtzJ5',
-    access_token_key: '1418647231897509888-8rzIS3f1M0yCIYgtx2t2H9uNXqhq7i',
-    access_token_secret: 'vGBjSPye2L5ZNmTgwXCuMAWCyWTCHLnIrnRps3vL48NlO' // from your User (oauth_token_secret)
+const client = new twitter_api_v2_1.default({
+    appKey: 'U6fkvXwsiznoaFXTXZlwCHCHv',
+    appSecret: 'JK4WB2oWB7EI5652Ifi6zxC6EncQILVJ6ZXq7VsUmvDuZKtzJ5',
+    accessToken: '1418647231897509888-8rzIS3f1M0yCIYgtx2t2H9uNXqhq7i',
+    accessSecret: 'vGBjSPye2L5ZNmTgwXCuMAWCyWTCHLnIrnRps3vL48NlO'
 });
-for (let mile = 1; mile <= constants_1.DISTANCE_MILES; mile++) {
-    console.log(`Processing mile ${mile}`);
-    const filePath = utils_1.getFilePath(mile, 'geojson');
-    const file = fs_1.default.readFileSync(filePath);
-    const section = JSON.parse(file.toString());
-    if (!section.properties.has_tweeted) {
-        console.log(`Tweet mile ${mile}`);
-        section.properties.has_tweeted = true;
-        fs_1.default.writeFileSync(filePath, JSON.stringify(section));
-        //   client.post("statuses/update", {
-        //     status: `Hello world ${mile}`
-        //   })
-        //   .then(resp => console.log(resp))
-        //   .catch(err => console.log(err));
-        break;
+async function go() {
+    for (let mile = 1; mile <= constants_1.DISTANCE_MILES; mile++) {
+        console.log(`Processing mile ${mile}`);
+        const geojsonFilePath = utils_1.getFilePath(mile, 'geojson');
+        const file = fs_1.default.readFileSync(geojsonFilePath);
+        const section = JSON.parse(file.toString());
+        const { geocode, has_tweeted, elevation_difference, max_elevation } = section.properties;
+        if (!has_tweeted) {
+            console.log(`Tweet mile ${mile}`);
+            const statusParts = [`Mile ${mile}`];
+            for (let i = 0; i < geocode.length; i++) {
+                const geocodeItem = geocode[i];
+                if (geocodeItem.id.includes('place')) {
+                    statusParts[0] = (`Mile ${mile} - ${geocodeItem.text}`);
+                    break;
+                }
+            }
+            statusParts.push(`Elevation gain: ${utils_1.metersToFeet(elevation_difference).toFixed()} ft.`);
+            statusParts.push(`Max elevation: ${utils_1.metersToFeet(max_elevation).toFixed(0)} ft.`);
+            const status = statusParts.join('\n');
+            const photoFilePath = utils_1.getFilePath(mile, 'png');
+            const photo = fs_1.default.readFileSync(photoFilePath);
+            try {
+                const mediaId = await client.v1.uploadMedia(photo, { type: 'png' });
+                const statusResponse = await client.v1.tweet(status, { media_ids: [mediaId] });
+                console.log(statusResponse);
+                section.properties.has_tweeted = true;
+                fs_1.default.writeFileSync(geojsonFilePath, JSON.stringify(section));
+            }
+            catch (error) {
+                console.log('Error posting status');
+                console.error(error);
+            }
+            break;
+        }
     }
 }
+go();

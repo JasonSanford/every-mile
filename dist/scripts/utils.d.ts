@@ -1,2 +1,3 @@
 declare const getFilePath: (mile: number, extension: string) => string;
-export { getFilePath };
+declare const metersToFeet: (meters: number) => number;
+export { getFilePath, metersToFeet };

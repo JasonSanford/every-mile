@@ -30,6 +30,6 @@
     "async": "^3.2.0",
     "get-pixels": "^3.3.3",
     "node-fetch": "^2.6.1",
-    "twitter-lite": "^1.1.0"
+    "twitter-api-v2": "^1.1.1"
   }
 }
