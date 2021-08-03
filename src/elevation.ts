@@ -39,6 +39,7 @@ async function getElevation(latitude: number, longitude: number): Promise<number
 
     await getImageTile(x, y);
 
+    // Stolen from https://www.npmjs.com/package/mapbox-elevation
     getPixels(getImageFilePath(x, y), 'image/png', (err, pixels) => {
       if (err) {
         reject(err);

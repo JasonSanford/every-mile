@@ -34,6 +34,7 @@ async function getElevation(latitude, longitude) {
         const tile = tileFraction.map(Math.floor);
         const [x, y] = tile;
         await getImageTile(x, y);
+        // Stolen from https://www.npmjs.com/package/mapbox-elevation
         get_pixels_1.default(getImageFilePath(x, y), 'image/png', (err, pixels) => {
             if (err) {
                 reject(err);

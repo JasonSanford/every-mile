@@ -17,7 +17,7 @@ const mapId = 'jcsanford/ckrm3rsr78uiq17q31yhwzul2';
 const dimensions = '700x450';
 const params = { padding, before_layer, access_token };
 const tasks = [];
-for (let mile = 16; mile <= 20; mile++) {
+for (let mile = 51; mile <= 100; mile++) {
     tasks.push((cb) => {
         setTimeout(async () => {
             console.log(`Processing mile ${mile}`);
