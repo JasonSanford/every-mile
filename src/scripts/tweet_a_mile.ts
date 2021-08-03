@@ -22,17 +22,21 @@ async function go() {
     const { geocode, has_tweeted, elevation_difference, max_elevation } = section.properties;
     if (!has_tweeted) {
       console.log(`Tweet mile ${mile}`);
-      const statusParts = [`Mile ${mile}`];
-
+      const statusParts = [];
+      const placeParts = [];
       for (let i = 0; i < geocode.length; i++) {
         const geocodeItem = geocode[i];
 
-        if (geocodeItem.id.includes('place')) {
-          statusParts[0] = (`Mile ${mile} - ${geocodeItem.text}`);
-          break;
+        if (geocodeItem.id.includes('place') || geocodeItem.id.includes('region')) {
+          placeParts.push(geocodeItem.text);
         }
       }
 
+      if (placeParts.length > 0) {
+        statusParts.push(`Mile ${mile}, ${placeParts.join(', ')}`);
+      } else {
+        statusParts.push(`Mile ${mile}`);
+      }
       statusParts.push(`Elevation gain: ${metersToFeet(elevation_difference).toFixed()} ft.`);
       statusParts.push(`Max elevation: ${metersToFeet(max_elevation).toFixed(0)} ft.`);
       statusParts.push('#blueridgeparkway #virginia #northcarolina #blueridge #mountains #appalachians #nationalparks');
