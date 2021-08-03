@@ -37,9 +37,15 @@ async function go() {
       } else {
         statusParts.push(`Mile ${mile}`);
       }
-      statusParts.push(`Elevation gain: ${metersToFeet(elevation_difference).toFixed()} ft.`);
-      statusParts.push(`Max elevation: ${metersToFeet(max_elevation).toFixed(0)} ft.`);
-      statusParts.push('#blueridgeparkway #virginia #northcarolina #blueridge #mountains #appalachians #nationalparks');
+
+      const elevGainFeetDisplay = parseInt(metersToFeet(elevation_difference).toFixed(), 10).toLocaleString();
+      const elevGainMetersDisplay = parseInt(elevation_difference.toFixed()).toLocaleString();
+      statusParts.push(`Elevation gain: ${elevGainFeetDisplay} ft (${elevGainMetersDisplay} m)`);
+
+      const maxElevFeetDisplay = parseInt(metersToFeet(max_elevation).toFixed(0)).toLocaleString();
+      const maxElevMetersDisplay = parseInt(max_elevation.toFixed(0)).toLocaleString();
+      statusParts.push(`Max elevation: ${maxElevFeetDisplay} ft (${maxElevMetersDisplay} m)`);
+
       const status = statusParts.join('\n');
 
       const photoFilePath = getFilePath(mile, 'png');
