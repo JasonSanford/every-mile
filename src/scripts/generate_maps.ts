@@ -19,7 +19,7 @@ const params = { padding, before_layer, access_token };
 
 const tasks = [];
 
-for (let mile = 400; mile <= DISTANCE_MILES; mile++) {
+for (let mile = 16; mile <= 20; mile++) {
   tasks.push((cb: CB) => {
     setTimeout(async () => {
       console.log(`Processing mile ${mile}`);

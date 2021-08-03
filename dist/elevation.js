@@ -18,7 +18,7 @@ const getImageTile = async (x, y) => {
     const filePath = getImageFilePath(x, y);
     if (fs_1.default.existsSync(filePath)) {
         // console.log('Cache hit');
-        fs_1.default.readFileSync(filePath);
+        // fs.readFileSync(filePath);
         return;
     }
     console.log('Cache miss', filePath);
@@ -30,11 +30,11 @@ const getImageTile = async (x, y) => {
 };
 async function getElevation(latitude, longitude) {
     return new Promise(async (resolve, reject) => {
-        const tileFraction = tilebelt_1.default.pointToTileFraction(longitude, latitude, 15);
+        const tileFraction = tilebelt_1.default.pointToTileFraction(longitude, latitude, Z);
         const tile = tileFraction.map(Math.floor);
         const [x, y] = tile;
         await getImageTile(x, y);
-        get_pixels_1.default(getImageFilePath(x, y), 'image/png', function (err, pixels) {
+        get_pixels_1.default(getImageFilePath(x, y), 'image/png', (err, pixels) => {
             if (err) {
                 reject(err);
             }
