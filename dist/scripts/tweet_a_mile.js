@@ -15,7 +15,6 @@ const twitterClientConfig = {
     accessToken: process.env.TWITTER_ACCESS_TOKEN,
     accessSecret: process.env.TWITTER_ACCESS_SECRET
 };
-console.log(twitterClientConfig);
 const client = new twitter_api_v2_1.default(twitterClientConfig);
 async function go() {
     for (let mile = 1; mile <= constants_1.DISTANCE_MILES; mile++) {

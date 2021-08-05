@@ -14,8 +14,6 @@ const twitterClientConfig = {
   accessSecret: process.env.TWITTER_ACCESS_SECRET
 };
 
-console.log(twitterClientConfig);
-
 const client = new TwitterApi(twitterClientConfig);
 
 async function go() {
