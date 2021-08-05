@@ -7,12 +7,16 @@ import { getFilePath, metersToFeet } from './utils';
 
 config();
 
-const client = new TwitterApi({
+const twitterClientConfig = {
   appKey: process.env.TWITTER_APP_KEY,
   appSecret: process.env.TWITTER_APP_SECRET,
   accessToken: process.env.TWITTER_ACCESS_TOKEN,
   accessSecret: process.env.TWITTER_ACCESS_SECRET
-});
+};
+
+console.log(twitterClientConfig);
+
+const client = new TwitterApi(twitterClientConfig);
 
 async function go() {
   for (let mile = 1; mile <= DISTANCE_MILES; mile++) {

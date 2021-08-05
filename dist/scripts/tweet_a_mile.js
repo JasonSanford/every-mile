@@ -9,12 +9,14 @@ const dotenv_1 = require("dotenv");
 const constants_1 = require("../constants");
 const utils_1 = require("./utils");
 dotenv_1.config();
-const client = new twitter_api_v2_1.default({
+const twitterClientConfig = {
     appKey: process.env.TWITTER_APP_KEY,
     appSecret: process.env.TWITTER_APP_SECRET,
     accessToken: process.env.TWITTER_ACCESS_TOKEN,
     accessSecret: process.env.TWITTER_ACCESS_SECRET
-});
+};
+console.log(twitterClientConfig);
+const client = new twitter_api_v2_1.default(twitterClientConfig);
 async function go() {
     for (let mile = 1; mile <= constants_1.DISTANCE_MILES; mile++) {
         console.log(`Processing mile ${mile}`);
