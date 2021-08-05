@@ -1,14 +1,17 @@
 import fs from 'fs';
 import TwitterApi from 'twitter-api-v2';
+import { config } from 'dotenv';
 
 import { DISTANCE_MILES } from '../constants';
 import { getFilePath, metersToFeet } from './utils';
 
+config();
+
 const client = new TwitterApi({
-  appKey: 'U6fkvXwsiznoaFXTXZlwCHCHv',
-  appSecret: 'JK4WB2oWB7EI5652Ifi6zxC6EncQILVJ6ZXq7VsUmvDuZKtzJ5',
-  accessToken: '1418647231897509888-8rzIS3f1M0yCIYgtx2t2H9uNXqhq7i',
-  accessSecret: 'vGBjSPye2L5ZNmTgwXCuMAWCyWTCHLnIrnRps3vL48NlO'
+  appKey: process.env.TWITTER_APP_KEY,
+  appSecret: process.env.TWITTER_APP_SECRET,
+  accessToken: process.env.TWITTER_ACCESS_TOKEN,
+  accessSecret: process.env.TWITTER_ACCESS_SECRET
 });
 
 async function go() {

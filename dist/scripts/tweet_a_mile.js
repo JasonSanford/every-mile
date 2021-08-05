@@ -5,13 +5,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
 const twitter_api_v2_1 = __importDefault(require("twitter-api-v2"));
+const dotenv_1 = require("dotenv");
 const constants_1 = require("../constants");
 const utils_1 = require("./utils");
+dotenv_1.config();
 const client = new twitter_api_v2_1.default({
-    appKey: 'U6fkvXwsiznoaFXTXZlwCHCHv',
-    appSecret: 'JK4WB2oWB7EI5652Ifi6zxC6EncQILVJ6ZXq7VsUmvDuZKtzJ5',
-    accessToken: '1418647231897509888-8rzIS3f1M0yCIYgtx2t2H9uNXqhq7i',
-    accessSecret: 'vGBjSPye2L5ZNmTgwXCuMAWCyWTCHLnIrnRps3vL48NlO'
+    appKey: process.env.TWITTER_APP_KEY,
+    appSecret: process.env.TWITTER_APP_SECRET,
+    accessToken: process.env.TWITTER_ACCESS_TOKEN,
+    accessSecret: process.env.TWITTER_ACCESS_SECRET
 });
 async function go() {
     for (let mile = 1; mile <= constants_1.DISTANCE_MILES; mile++) {
