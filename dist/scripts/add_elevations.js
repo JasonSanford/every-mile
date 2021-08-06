@@ -50,5 +50,5 @@ async_1.series(tasks, (error, results) => {
         console.log('error', error);
         return;
     }
-    console.log(results.length);
+    console.log(results?.length);
 });

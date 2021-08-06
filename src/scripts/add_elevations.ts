@@ -56,5 +56,5 @@ series(tasks, (error, results) => {
     return;
   }
 
-  console.log(results.length);
+  console.log(results?.length);
 });

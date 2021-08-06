@@ -28,7 +28,6 @@ for (let mile = 401; mile <= DISTANCE_MILES; mile++) {
       const section = JSON.parse(file.toString());
       const bufferedLineAsPolygon = turfBuffer(section.geometry, 0.075);
       const bufferedLineAsLine = polygonToLine(bufferedLineAsPolygon);
-      // @ts-ignore
       const corrected = bufferedLineAsLine.geometry.coordinates.map(([lng, lat]) => [lat, lng]);
       // @ts-ignore
       const encodedLine = polyline.encode(corrected, 5);
