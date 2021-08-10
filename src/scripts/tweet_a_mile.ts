@@ -8,13 +8,12 @@ import { getFilePath, metersToFeet } from './utils';
 config();
 
 const twitterClientConfig = {
-  appKey: process.env.TWITTER_APP_KEY,
-  appSecret: process.env.TWITTER_APP_SECRET,
-  accessToken: process.env.TWITTER_ACCESS_TOKEN,
-  accessSecret: process.env.TWITTER_ACCESS_SECRET
+  appKey: process.env.TWITTER_APP_KEY as string,
+  appSecret: process.env.TWITTER_APP_SECRET as string,
+  accessToken: process.env.TWITTER_ACCESS_TOKEN as string,
+  accessSecret: process.env.TWITTER_ACCESS_SECRET as string
 };
 
-// @ts-ignore
 const client = new TwitterApi(twitterClientConfig);
 
 async function go() {
@@ -38,10 +37,11 @@ async function go() {
         }
       }
 
+      const mileageText = `Mile ${mile} of ${DISTANCE_MILES.toLocaleString()}`
       if (placeParts.length > 0) {
-        statusParts.push(`Mile ${mile}, ${placeParts.join(', ')}`);
+        statusParts.push(`${mileageText}: ${placeParts.join(', ')}`);
       } else {
-        statusParts.push(`Mile ${mile}`);
+        statusParts.push(mileageText);
       }
 
       const elevGainFeetDisplay = parseInt(metersToFeet(elevation_difference).toFixed(), 10).toLocaleString();

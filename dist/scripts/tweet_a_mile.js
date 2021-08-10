@@ -15,7 +15,6 @@ const twitterClientConfig = {
     accessToken: process.env.TWITTER_ACCESS_TOKEN,
     accessSecret: process.env.TWITTER_ACCESS_SECRET
 };
-// @ts-ignore
 const client = new twitter_api_v2_1.default(twitterClientConfig);
 async function go() {
     for (let mile = 1; mile <= constants_1.DISTANCE_MILES; mile++) {
@@ -34,11 +33,12 @@ async function go() {
                     placeParts.push(geocodeItem.text);
                 }
             }
+            const mileageText = `Mile ${mile} of ${constants_1.DISTANCE_MILES.toLocaleString()}`;
             if (placeParts.length > 0) {
-                statusParts.push(`Mile ${mile}, ${placeParts.join(', ')}`);
+                statusParts.push(`${mileageText}: ${placeParts.join(', ')}`);
             }
             else {
-                statusParts.push(`Mile ${mile}`);
+                statusParts.push(mileageText);
             }
             const elevGainFeetDisplay = parseInt(utils_1.metersToFeet(elevation_difference).toFixed(), 10).toLocaleString();
             const elevGainMetersDisplay = parseInt(elevation_difference.toFixed()).toLocaleString();
