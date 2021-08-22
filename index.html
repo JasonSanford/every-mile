@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mapbox GL JS debug page</title>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <!-- <link rel='stylesheet' href='../dist/mapbox-gl.css' /> -->
+    <style>
+        #map { width: 960px; height: 540px; }
+    </style>
+</head>
+
+<body>
+<div id='map'></div>
+
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.js'></script>
+<script src='https://unpkg.com/@mapbox/polyline@1.1.1/src/polyline.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.css' rel='stylesheet' />
+
+<script type="module">
+import loadEncoder from 'https://unpkg.com/mp4-h264@1.0.7/build/mp4-encoder.js';
+import {simd} from 'https://unpkg.com/wasm-feature-detect?module';
+
+const data = {"type":"LineString","coordinates":[[-79.3325275,37.631786],[-79.332665,37.631668],[-79.332787,37.63158],[-79.332951,37.631479],[-79.333125,37.63139],[-79.333905,37.631044],[-79.3339799,37.63101],[-79.334326,37.630853],[-79.334382,37.630822],[-79.334515,37.630735],[-79.334635,37.630637],[-79.334751,37.630519],[-79.334824,37.630422],[-79.33488,37.630319],[-79.334913,37.630233],[-79.334939,37.630122],[-79.334946,37.629983],[-79.334933,37.629864],[-79.334903,37.629747],[-79.334844,37.629611],[-79.334752,37.629475],[-79.334597,37.62928],[-79.334421,37.629097],[-79.334189,37.628891],[-79.334011,37.628709],[-79.33388,37.628557],[-79.333723,37.628353],[-79.333648,37.628231],[-79.333591,37.628103],[-79.333533,37.627908],[-79.333505,37.627758],[-79.333495,37.627606],[-79.3335,37.627484],[-79.333523,37.627333],[-79.333591,37.627105],[-79.333684,37.626861],[-79.333794,37.626622],[-79.333895,37.626434],[-79.334207,37.625797],[-79.334482,37.625185],[-79.33463,37.624877],[-79.334711,37.62466],[-79.334724,37.624625],[-79.334758,37.624489],[-79.334776,37.624351],[-79.334775,37.624213],[-79.334762,37.624103],[-79.33472,37.62392],[-79.334654,37.623668],[-79.334569,37.623419],[-79.334467,37.623175],[-79.334261,37.622766],[-79.334139,37.622543],[-79.334007,37.622324],[-79.333794,37.621999],[-79.333664,37.621821],[-79.33355,37.621684],[-79.333394,37.62152],[-79.333251,37.62139],[-79.333048,37.621232],[-79.332832,37.621085],[-79.332478,37.620873],[-79.332274,37.620734],[-79.332026,37.62054],[-79.33189,37.620424],[-79.331675,37.620224],[-79.33144,37.619981],[-79.3312021,37.6197158]]};
+
+mapboxgl.accessToken = 'pk.eyJ1IjoiamNzYW5mb3JkIiwiYSI6ImNrZG1kdnU5NzE3bG4yenBkbzU5bDQ2NXMifQ.IMquilPKSANQDaSzf3fjcg';
+const map = window.map = new mapboxgl.Map({
+    container: 'map',
+    center: data.coordinates[0],
+    zoom: 16,
+    pitch: 67,
+    bearing: 160,
+    // style: 'mapbox://styles/mapbox/satellite-v9'
+    // style: 'mapbox://styles/jcsanford/cks3bzm7c1ylb17nz0zp4fted'
+    style: 'mapbox://styles/jcsanford/ckskfetbk072c18lq5eqjwc6z'
+});
+
+map.on('load', async () => {
+    map.addSource('dem', {type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1'});
+    map.setTerrain({source: 'dem', exaggeration: 1.5});
+    map.setFog({
+      'range': [0.5, 10],
+      'color': 'white',
+      'horizon-blend': 0.1
+    });
+    map.addSource('route', {
+      type: 'geojson',
+      data: { type: 'LineString', coordinates: []}
+    });
+    map.addLayer({
+      'id': 'route',
+      'type': 'line',
+      'source': 'route',
+      'layout': {
+        'line-join': 'round',
+        'line-cap': 'round'
+      },
+      'paint': {
+        'line-color': '#ff7800',
+        'line-width': 5,
+        'line-opacity': 0.8
+      }
+    });
+
+    const coordinates = data.coordinates;
+
+    // start by showing just the first coordinate
+    data.coordinates = [coordinates[0]];
+
+    async function animate() {
+      return new Promise((resolve, reject) => {
+        let i = 0;
+        const timer = setInterval(async () => {
+          if (i < coordinates.length) {
+            data.coordinates.push(coordinates[i]);
+            map.getSource('route').setData(data);
+            map.panTo(coordinates[i]);
+            // Do we need this?
+            await map.once('moveend');
+            i++;
+          } else {
+            window.clearInterval(timer);
+            resolve('ok');
+          }
+        }, 250);
+      });
+      // await map.once('moveend');
+    }
+    // const startAnimatingRoute = () => {
+    //   let i = 0;
+    //   const timer = setInterval(() => {
+    //     if (i < coordinates.length) {
+    //       data.coordinates.push(coordinates[i]);
+    //       map.getSource('route').setData(data);
+    //       map.panTo(coordinates[i]);
+    //       i++;
+    //     } else {
+    //       window.clearInterval(timer);
+    //     }
+    //   }, 100);
+    // };
+    // setTimeout(startAnimatingRoute, 2000);
+    await map.once('idle');
+
+    // uncomment to fine-tune animation without recording:
+    // animate(); return;
+
+    // don't forget to enable WebAssembly SIMD in chrome://flags for faster encoding
+    const supportsSIMD = await simd();
+
+    // initialize H264 video encoder
+    const Encoder = await loadEncoder({simd: supportsSIMD});
+
+    const gl = map.painter.context.gl;
+    const width = gl.drawingBufferWidth;
+    const height = gl.drawingBufferHeight;
+
+    const encoder = Encoder.create({
+        width,
+        height,
+        fps: 60,
+        kbps: 64000,
+        rgbFlipY: true
+    });
+
+    // stub performance.now for deterministic rendering per-frame (only available in dev build)
+    let now = performance.now();
+    mapboxgl.setNow(now);
+
+    const ptr = encoder.getRGBPointer(); // keep a pointer to encoder WebAssembly heap memory
+
+    function frame() {
+        // increment stub time by 16.6ms (60 fps)
+        now += 1000 / 60;
+        mapboxgl.setNow(now);
+
+        const pixels = encoder.memory().subarray(ptr); // get a view into encoder memory
+        gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixels); // read pixels into encoder
+        encoder.encodeRGBPointer(); // encode the frame
+    }
+
+    map.on('render', frame); // set up frame-by-frame recording
+
+    await animate(); // run all the animations
+
+    // stop recording
+    map.off('render', frame);
+    mapboxgl.restoreNow();
+
+    // download the encoded video file
+    const mp4 = encoder.end();
+    const anchor = document.createElement("a");
+    anchor.href =  URL.createObjectURL(new Blob([mp4], {type: "video/mp4"}));
+    anchor.download = "mapbox-gl";
+    anchor.click();
+
+    // make sure to run `ffmpeg -i mapbox-gl.mp4 mapbox-gl-optimized.mp4` to compress the video
+});
+
+</script>
+</body>
+</html>

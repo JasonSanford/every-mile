@@ -47,10 +47,19 @@ async function go() {
             const maxElevMetersDisplay = parseInt(max_elevation.toFixed(0)).toLocaleString();
             statusParts.push(`Max elevation: ${maxElevFeetDisplay} ft (${maxElevMetersDisplay} m)`);
             const status = statusParts.join('\n');
-            const photoFilePath = utils_1.getFilePath(mile, 'png');
-            const photo = fs_1.default.readFileSync(photoFilePath);
+            let mediaFilePath = utils_1.getFilePath(mile, 'png');
+            let media = fs_1.default.readFileSync(mediaFilePath);
+            let mediaType = 'png';
             try {
-                const mediaId = await client.v1.uploadMedia(photo, { type: 'png' });
+                mediaFilePath = utils_1.getFilePath(mile, 'gif');
+                media = fs_1.default.readFileSync(mediaFilePath);
+                mediaType = 'gif';
+            }
+            catch (error) {
+                // No gif
+            }
+            try {
+                const mediaId = await client.v1.uploadMedia(media, { type: mediaType });
                 const statusResponse = await client.v1.tweet(status, { media_ids: [mediaId] });
                 console.log(statusResponse);
                 section.properties.has_tweeted = true;

@@ -1,6 +1,14 @@
-const getFilePath = (mile: number, extension: string) => {
-  const directory = extension === 'geojson' ? 'geom' : 'images';
-  const fileName = `mile_${mile.toString().padStart(3, '0')}.${extension}`
+const extensionDirMap = {
+  geojson: 'geom',
+  png: 'images',
+  gif: 'images',
+};
+
+type Extension = 'geojson' | 'png' | 'gif';
+
+const getFilePath = (mile: number, extension: Extension) => {
+  const directory = extensionDirMap[extension];
+  const fileName = `mile_${mile.toString().padStart(4, '0')}.${extension}`
   return `${__dirname}/../../${directory}/${fileName}`;
 };
 

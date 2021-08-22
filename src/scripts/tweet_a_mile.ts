@@ -16,6 +16,8 @@ const twitterClientConfig = {
 
 const client = new TwitterApi(twitterClientConfig);
 
+type MediaType = 'png' | 'gif';
+
 async function go() {
   for (let mile = 1; mile <= DISTANCE_MILES; mile++) {
     console.log(`Processing mile ${mile}`);
@@ -54,11 +56,20 @@ async function go() {
 
       const status = statusParts.join('\n');
 
-      const photoFilePath = getFilePath(mile, 'png');
-      const photo = fs.readFileSync(photoFilePath);
+      let mediaFilePath = getFilePath(mile, 'png');
+      let media = fs.readFileSync(mediaFilePath);
+      let mediaType: MediaType = 'png';
 
       try {
-        const mediaId = await client.v1.uploadMedia(photo, { type: 'png'});
+        mediaFilePath = getFilePath(mile, 'gif');
+        media = fs.readFileSync(mediaFilePath);
+        mediaType = 'gif';
+      } catch (error) {
+        // No gif
+      }
+
+      try {
+        const mediaId = await client.v1.uploadMedia(media, { type: mediaType });
         const statusResponse = await client.v1.tweet(status, { media_ids: [mediaId] });
         console.log(statusResponse);
         section.properties.has_tweeted = true;
