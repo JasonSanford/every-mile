@@ -9,16 +9,18 @@ const node_fetch_1 = __importDefault(require("node-fetch"));
 const buffer_1 = __importDefault(require("@turf/buffer"));
 const polygon_to_line_1 = require("@turf/polygon-to-line");
 const polyline_1 = __importDefault(require("@mapbox/polyline"));
-const constants_1 = require("../constants");
 const utils_1 = require("./utils");
 const access_token = 'pk.eyJ1IjoiamNzYW5mb3JkIiwiYSI6ImNrZG1kdnU5NzE3bG4yenBkbzU5bDQ2NXMifQ.IMquilPKSANQDaSzf3fjcg';
 const before_layer = 'contour-line';
 const padding = '100';
-const mapId = 'jcsanford/ckrm3rsr78uiq17q31yhwzul2';
+const mapId = '';
 const dimensions = '700x450';
 const params = { padding, before_layer, access_token };
+const go = () => {
+};
+go();
 const tasks = [];
-for (let mile = 401; mile <= constants_1.DISTANCE_MILES; mile++) {
+for (let mile = 401; mile <= DISTANCE_MILES; mile++) {
     tasks.push((cb) => {
         setTimeout(async () => {
             console.log(`Processing mile ${mile}`);

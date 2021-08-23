@@ -1,4 +1,4 @@
-import { DISTANCES } from '../constants';
+import { DISTANCES, MAP_BUFFER_DISTANCES, MAP_IDS } from '../constants';
 const trails = ['brp', 'at'] as const;
 export type TrailString = (typeof trails)[number];
 const isTrail = (x: any): x is TrailString => trails.includes(x);
@@ -41,4 +41,8 @@ const getTrailArg = (): TrailString | null => {
 
 const getDistance = (trailString: TrailString) => DISTANCES[trailString];
 
-export { getFilePath, metersToFeet, getTrailArg, getDistance };
+const getMapId = (trailString: TrailString) => MAP_IDS[trailString];
+
+const getBufferDistance = (trailString: TrailString) => MAP_BUFFER_DISTANCES[trailString];
+
+export { getFilePath, metersToFeet, getTrailArg, getDistance, getMapId, getBufferDistance };

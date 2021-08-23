@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDistance = exports.getTrailArg = exports.metersToFeet = exports.getFilePath = void 0;
+exports.getBufferDistance = exports.getMapId = exports.getDistance = exports.getTrailArg = exports.metersToFeet = exports.getFilePath = void 0;
 const constants_1 = require("../constants");
 const trails = ['brp', 'at'];
 const isTrail = (x) => trails.includes(x);
@@ -38,3 +38,7 @@ const getTrailArg = () => {
 exports.getTrailArg = getTrailArg;
 const getDistance = (trailString) => constants_1.DISTANCES[trailString];
 exports.getDistance = getDistance;
+const getMapId = (trailString) => constants_1.MAP_IDS[trailString];
+exports.getMapId = getMapId;
+const getBufferDistance = (trailString) => constants_1.MAP_BUFFER_DISTANCES[trailString];
+exports.getBufferDistance = getBufferDistance;
