@@ -8,7 +8,7 @@ const extensionDirMap = {
 };
 const getFilePath = (mile, extension) => {
     const directory = extensionDirMap[extension];
-    const fileName = `mile_${mile.toString().padStart(4, '0')}.${extension}`;
+    const fileName = `mile_${mile.toString().padStart(3, '0')}.${extension}`;
     return `${__dirname}/../../${directory}/${fileName}`;
 };
 exports.getFilePath = getFilePath;

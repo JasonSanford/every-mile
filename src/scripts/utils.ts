@@ -8,7 +8,7 @@ type Extension = 'geojson' | 'png' | 'gif';
 
 const getFilePath = (mile: number, extension: Extension) => {
   const directory = extensionDirMap[extension];
-  const fileName = `mile_${mile.toString().padStart(4, '0')}.${extension}`
+  const fileName = `mile_${mile.toString().padStart(3, '0')}.${extension}`
   return `${__dirname}/../../${directory}/${fileName}`;
 };
 
