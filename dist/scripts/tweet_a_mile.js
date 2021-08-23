@@ -6,20 +6,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
 const twitter_api_v2_1 = __importDefault(require("twitter-api-v2"));
 const dotenv_1 = require("dotenv");
-const constants_1 = require("../constants");
 const utils_1 = require("./utils");
 dotenv_1.config();
-const twitterClientConfig = {
-    appKey: process.env.TWITTER_APP_KEY,
-    appSecret: process.env.TWITTER_APP_SECRET,
-    accessToken: process.env.TWITTER_ACCESS_TOKEN,
-    accessSecret: process.env.TWITTER_ACCESS_SECRET
-};
-const client = new twitter_api_v2_1.default(twitterClientConfig);
 async function go() {
-    for (let mile = 1; mile <= constants_1.DISTANCE_MILES; mile++) {
+    const trailArg = utils_1.getTrailArg();
+    if (!trailArg) {
+        return;
+    }
+    const DISTANCE = utils_1.getDistance(trailArg);
+    const twitterClientConfig = utils_1.getTwitterClientConfig(trailArg);
+    const client = new twitter_api_v2_1.default(twitterClientConfig);
+    for (let mile = 1; mile <= DISTANCE; mile++) {
         console.log(`Processing mile ${mile}`);
-        const geojsonFilePath = utils_1.getFilePath(mile, 'geojson');
+        const geojsonFilePath = utils_1.getFilePath('brp', mile, 'geojson');
         const file = fs_1.default.readFileSync(geojsonFilePath);
         const section = JSON.parse(file.toString());
         const { geocode, has_tweeted, elevation_difference, max_elevation } = section.properties;
@@ -33,7 +32,7 @@ async function go() {
                     placeParts.push(geocodeItem.text);
                 }
             }
-            const mileageText = `Mile ${mile} of ${constants_1.DISTANCE_MILES.toLocaleString()}`;
+            const mileageText = `Mile ${mile} of ${DISTANCE.toLocaleString()}`;
             if (placeParts.length > 0) {
                 statusParts.push(`${mileageText}: ${placeParts.join(', ')}`);
             }
@@ -47,16 +46,16 @@ async function go() {
             const maxElevMetersDisplay = parseInt(max_elevation.toFixed(0)).toLocaleString();
             statusParts.push(`Max elevation: ${maxElevFeetDisplay} ft (${maxElevMetersDisplay} m)`);
             const status = statusParts.join('\n');
-            let mediaFilePath = utils_1.getFilePath(mile, 'png');
+            let mediaFilePath = utils_1.getFilePath('brp', mile, 'png');
             let media = fs_1.default.readFileSync(mediaFilePath);
             let mediaType = 'png';
             try {
-                mediaFilePath = utils_1.getFilePath(mile, 'gif');
+                mediaFilePath = utils_1.getFilePath('brp', mile, 'gif');
                 media = fs_1.default.readFileSync(mediaFilePath);
                 mediaType = 'gif';
             }
             catch (error) {
-                // No gif
+                console.log('No gif found');
             }
             try {
                 const mediaId = await client.v1.uploadMedia(media, { type: mediaType });

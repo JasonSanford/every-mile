@@ -1,0 +1,35 @@
+name: Blue Ridge Parkway
+
+on:
+  schedule:
+    - cron: '0 14,17 * * *'
+  workflow_dispatch:
+
+jobs:
+  tweet:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node it
+        uses: actions/setup-node@v2
+        with:
+          cache: 'npm'
+          ref: ${{ github.head_ref }}
+      - name: Install it
+        run: npm install
+      - name: Config it
+        run: |
+          echo TWITTER_APP_KEY_brp=${{ secrets.TWITTER_APP_KEY_BRP }} > .env
+          echo TWITTER_APP_SECRET_brp=${{ secrets.TWITTER_APP_SECRET_BRP }} >> .env
+          echo TWITTER_ACCESS_TOKEN_brp=${{ secrets.TWITTER_ACCESS_TOKEN_BRP }} >> .env
+          echo TWITTER_ACCESS_SECRET_brp=${{ secrets.TWITTER_ACCESS_SECRET_BRP }} >> .env
+      - name: Tweet it
+        run: node dist/scripts/tweet_a_mile.js brp
+      - name: Commit it
+        run: |
+          git config --global user.name 'Jason Sanford'
+          git config --global user.email 'jasonsanford@gmail.com'
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git commit -am "Tweeted Blue Ridge Parkway"
+          git push
