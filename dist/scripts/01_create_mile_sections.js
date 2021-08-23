@@ -13,7 +13,6 @@ const go = () => {
         return;
     }
     const DISTANCE = utils_1.getDistance(trailArg);
-    // const fileBuffer = fs.readFileSync(__dirname + `/../../geom/${trailArg}/all.geojson`);
     const fileBuffer = fs_1.default.readFileSync(utils_1.getFilePath(trailArg, 'all', 'geojson'));
     const all = JSON.parse(fileBuffer.toString());
     let mile = 1;

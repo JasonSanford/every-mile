@@ -7,13 +7,13 @@ import { getFilePath, getTrailArg, getDistance } from './utils';
 
 const go = () => {
   const trailArg = getTrailArg();
+
   if (!trailArg) {
     return;
   }
 
   const DISTANCE = getDistance(trailArg);
 
-  // const fileBuffer = fs.readFileSync(__dirname + `/../../geom/${trailArg}/all.geojson`);
   const fileBuffer = fs.readFileSync(getFilePath(trailArg, 'all', 'geojson'));
   const all = JSON.parse(fileBuffer.toString());
 
