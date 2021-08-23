@@ -33,6 +33,7 @@ const go = () => {
                 const bufferedLineAsPolygon = buffer_1.default(section.geometry, utils_1.getBufferDistance(trailArg));
                 const bufferedLineAsLine = polygon_to_line_1.polygonToLine(bufferedLineAsPolygon);
                 const corrected = bufferedLineAsLine.geometry.coordinates.map(([lng, lat]) => [lat, lng]);
+                // eslint-disable-next-line
                 // @ts-ignore
                 const encodedLine = polyline_1.default.encode(corrected, 5);
                 const path = `path-2+999999-1+999999-0.4(${encodeURIComponent(encodedLine)})`;

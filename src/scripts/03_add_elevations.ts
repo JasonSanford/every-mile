@@ -1,11 +1,13 @@
 import fs from 'fs';
 
-import { series } from 'async'
+import { series } from 'async';
 import { getElevation } from '../elevation';
 
 import { getDistance, getFilePath, getTrailArg } from './utils';
 
-type CB = (error: Error | null, results: any) => void;
+type NumOrNull = number | null;
+
+type CB = (error: Error | null, results: NumOrNull) => void;
 
 const go = () => {
   const trailArg = getTrailArg();
@@ -27,17 +29,17 @@ const go = () => {
         const section = JSON.parse(file.toString());
 
         const elevationTasks = section.geometry.coordinates.map((coordinate: number[]) => {
-          return (cb: CB) => {
+          return (cbElevation: CB) => {
             setTimeout(async () => {
               const [longitude, latitude] = coordinate;
               try {
                 let elevation = await getElevation(latitude, longitude);
-                elevation = parseFloat(elevation.toFixed(1))
-                cb(null, elevation);
+                elevation = parseFloat(elevation.toFixed(1));
+                cbElevation(null, elevation);
               } catch (error) {
                 console.log('Error getting elevation', error);
                 // Some elevation errors are ok, just add a null entry.
-                cb(null, null);
+                cbElevation(null, null);
               }
             }, 20);
           };
@@ -51,7 +53,7 @@ const go = () => {
 
           section.properties.elevations = elevationResults;
           fs.writeFileSync(filePath, JSON.stringify(section));
-          cb(null, elevationResults);
+          cb(null, Array.isArray(elevationResults) ? elevationResults.length : 0);
         });
       }, 4000);
     });

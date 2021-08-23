@@ -26,7 +26,7 @@ const go = () => {
     const filePath = getFilePath(trailArg, mile, 'geojson');
     const file = fs.readFileSync(filePath);
     const section = JSON.parse(file.toString());
-    const { elevations } = section.properties
+    const { elevations } = section.properties;
     
     const firstElevation = elevations[0];
     const lastElevation = elevations[elevations.length - 1];

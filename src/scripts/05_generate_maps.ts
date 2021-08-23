@@ -7,7 +7,7 @@ import polyline from '@mapbox/polyline';
 
 import { getFilePath, getDistance, getMapId, getTrailArg, getBufferDistance } from './utils';
 
-type CB = (error: Error | null, results: any) => void;
+type CB = (error: Error | null, results: number) => void;
 
 const access_token = 'pk.eyJ1IjoiamNzYW5mb3JkIiwiYSI6ImNrZG1kdnU5NzE3bG4yenBkbzU5bDQ2NXMifQ.IMquilPKSANQDaSzf3fjcg';
 const before_layer = 'contour-line';
@@ -37,6 +37,7 @@ const go = () => {
         const bufferedLineAsPolygon = turfBuffer(section.geometry, getBufferDistance(trailArg));
         const bufferedLineAsLine = polygonToLine(bufferedLineAsPolygon);
         const corrected = bufferedLineAsLine.geometry.coordinates.map(([lng, lat]) => [lat, lng]);
+        // eslint-disable-next-line
         // @ts-ignore
         const encodedLine = polyline.encode(corrected, 5);
         const path = `path-2+999999-1+999999-0.4(${encodeURIComponent(encodedLine)})`;

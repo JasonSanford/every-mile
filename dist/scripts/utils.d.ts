@@ -1,3 +1,4 @@
+import { TwitterApiTokens } from 'twitter-api-v2';
 declare const trails: readonly ["brp", "at"];
 export declare type TrailString = (typeof trails)[number];
 declare type Extension = 'geojson' | 'png' | 'gif';
@@ -7,10 +8,5 @@ declare const getTrailArg: () => TrailString | null;
 declare const getDistance: (trailString: TrailString) => number;
 declare const getMapId: (trailString: TrailString) => string;
 declare const getBufferDistance: (trailString: TrailString) => number;
-declare const getTwitterClientConfig: (trailString: TrailString) => {
-    appKey: string;
-    appSecret: string;
-    accessToken: string;
-    accessSecret: string;
-};
+declare const getTwitterClientConfig: (trailString: TrailString) => TwitterApiTokens;
 export { getFilePath, metersToFeet, getTrailArg, getDistance, getMapId, getBufferDistance, getTwitterClientConfig };

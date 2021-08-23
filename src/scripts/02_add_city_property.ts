@@ -8,7 +8,7 @@ import { getFilePath, getTrailArg, getDistance } from './utils';
 
 const geocoder = Geocoder({ accessToken: MAPBOX_TOKEN });
 
-type CB = (error: Error | null, results: any) => void;
+type CB = (error: Error | null, results: number) => void;
 
 const go = () => {
   const trailArg = getTrailArg();
@@ -44,6 +44,6 @@ const go = () => {
 
     console.log(results);
   });
-}
+};
 
 go();

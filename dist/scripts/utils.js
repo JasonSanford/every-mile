@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTwitterClientConfig = exports.getBufferDistance = exports.getMapId = exports.getDistance = exports.getTrailArg = exports.metersToFeet = exports.getFilePath = void 0;
 const constants_1 = require("../constants");
 const trails = ['brp', 'at'];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isTrail = (x) => trails.includes(x);
 const extensionDirMap = {
     geojson: 'geom',
