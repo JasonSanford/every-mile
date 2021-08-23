@@ -18,7 +18,7 @@ async function go() {
     const client = new twitter_api_v2_1.default(twitterClientConfig);
     for (let mile = 1; mile <= DISTANCE; mile++) {
         console.log(`Processing mile ${mile}`);
-        const geojsonFilePath = utils_1.getFilePath('brp', mile, 'geojson');
+        const geojsonFilePath = utils_1.getFilePath(trailArg, mile, 'geojson');
         const file = fs_1.default.readFileSync(geojsonFilePath);
         const section = JSON.parse(file.toString());
         const { geocode, has_tweeted, elevation_difference, max_elevation } = section.properties;
@@ -46,11 +46,11 @@ async function go() {
             const maxElevMetersDisplay = parseInt(max_elevation.toFixed(0)).toLocaleString();
             statusParts.push(`Max elevation: ${maxElevFeetDisplay} ft (${maxElevMetersDisplay} m)`);
             const status = statusParts.join('\n');
-            let mediaFilePath = utils_1.getFilePath('brp', mile, 'png');
+            let mediaFilePath = utils_1.getFilePath(trailArg, mile, 'png');
             let media = fs_1.default.readFileSync(mediaFilePath);
             let mediaType = 'png';
             try {
-                mediaFilePath = utils_1.getFilePath('brp', mile, 'gif');
+                mediaFilePath = utils_1.getFilePath(trailArg, mile, 'gif');
                 media = fs_1.default.readFileSync(mediaFilePath);
                 mediaType = 'gif';
             }

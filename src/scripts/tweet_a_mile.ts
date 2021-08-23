@@ -24,7 +24,7 @@ async function go() {
   for (let mile = 1; mile <= DISTANCE; mile++) {
     console.log(`Processing mile ${mile}`);
 
-    const geojsonFilePath = getFilePath('brp', mile, 'geojson');
+    const geojsonFilePath = getFilePath(trailArg, mile, 'geojson');
     const file = fs.readFileSync(geojsonFilePath);
     const section = JSON.parse(file.toString());
 
@@ -58,12 +58,12 @@ async function go() {
 
       const status = statusParts.join('\n');
 
-      let mediaFilePath = getFilePath('brp', mile, 'png');
+      let mediaFilePath = getFilePath(trailArg, mile, 'png');
       let media = fs.readFileSync(mediaFilePath);
       let mediaType: MediaType = 'png';
 
       try {
-        mediaFilePath = getFilePath('brp', mile, 'gif');
+        mediaFilePath = getFilePath(trailArg, mile, 'gif');
         media = fs.readFileSync(mediaFilePath);
         mediaType = 'gif';
       } catch (error) {
