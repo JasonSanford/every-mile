@@ -21,7 +21,7 @@ const go = () => {
     const DISTANCE = utils_1.getDistance(trailArg);
     for (let mile = 1; mile <= DISTANCE; mile++) {
         console.log(`Processing mile ${mile}`);
-        const filePath = utils_1.getFilePath('brp', mile, 'geojson');
+        const filePath = utils_1.getFilePath(trailArg, mile, 'geojson');
         const file = fs_1.default.readFileSync(filePath);
         const section = JSON.parse(file.toString());
         const { elevations } = section.properties;
