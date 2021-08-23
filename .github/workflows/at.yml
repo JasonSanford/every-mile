@@ -1,0 +1,35 @@
+name: Appalachian Trail
+
+on:
+  schedule:
+    - cron: '0 12,16 * * *'
+  workflow_dispatch:
+
+jobs:
+  tweet:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node it
+        uses: actions/setup-node@v2
+        with:
+          cache: 'npm'
+          ref: ${{ github.head_ref }}
+      - name: Install it
+        run: npm install
+      - name: Config it
+        run: |
+          echo TWITTER_APP_KEY_at=${{ secrets.TWITTER_APP_KEY_AT }} > .env
+          echo TWITTER_APP_SECRET_at=${{ secrets.TWITTER_APP_SECRET_AT }} >> .env
+          echo TWITTER_ACCESS_TOKEN_at=${{ secrets.TWITTER_ACCESS_TOKEN_AT }} >> .env
+          echo TWITTER_ACCESS_SECRET_at=${{ secrets.TWITTER_ACCESS_SECRET_AT }} >> .env
+      - name: Tweet it
+        run: node dist/scripts/tweet_a_mile.js at
+      - name: Commit it
+        run: |
+          git config --global user.name 'Jason Sanford'
+          git config --global user.email 'jasonsanford@gmail.com'
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git commit -am "Tweeted Appalachian Trail"
+          git push
