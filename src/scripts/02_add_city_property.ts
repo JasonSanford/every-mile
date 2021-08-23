@@ -3,8 +3,8 @@ import fs from 'fs';
 import { series } from 'async';
 import Geocoder from '@mapbox/mapbox-sdk/services/geocoding';
 
-import { DISTANCE_MILES, MAPBOX_TOKEN } from '../constants';
-import { getFilePath, getTrailArg } from './utils';
+import { MAPBOX_TOKEN } from '../constants';
+import { getFilePath, getTrailArg, getDistance } from './utils';
 
 const geocoder = Geocoder({ accessToken: MAPBOX_TOKEN });
 
@@ -17,9 +17,11 @@ const go = () => {
     return;
   }
 
+  const DISTANCE = getDistance(trailArg);
+
   const tasks = [];
 
-  for (let mile = 1; mile <= DISTANCE_MILES; mile++) {
+  for (let mile = 1; mile <= DISTANCE; mile++) {
     tasks.push((cb: CB) => {
       setTimeout(async () => {
         console.log(`Processing mile ${mile}`);

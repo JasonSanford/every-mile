@@ -14,8 +14,9 @@ const go = () => {
     if (!trailArg) {
         return;
     }
+    const DISTANCE = utils_1.getDistance(trailArg);
     const tasks = [];
-    for (let mile = 1; mile <= constants_1.DISTANCE_MILES; mile++) {
+    for (let mile = 1; mile <= DISTANCE; mile++) {
         tasks.push((cb) => {
             setTimeout(async () => {
                 console.log(`Processing mile ${mile}`);
