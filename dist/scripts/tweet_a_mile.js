@@ -6,18 +6,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
 const twitter_api_v2_1 = __importDefault(require("twitter-api-v2"));
 const dotenv_1 = require("dotenv");
-const constants_1 = require("../constants");
 const utils_1 = require("./utils");
 dotenv_1.config();
-const twitterClientConfig = {
-    appKey: process.env.TWITTER_APP_KEY,
-    appSecret: process.env.TWITTER_APP_SECRET,
-    accessToken: process.env.TWITTER_ACCESS_TOKEN,
-    accessSecret: process.env.TWITTER_ACCESS_SECRET
-};
-const client = new twitter_api_v2_1.default(twitterClientConfig);
 async function go() {
-    for (let mile = 1; mile <= constants_1.DISTANCE_MILES; mile++) {
+    const trailArg = utils_1.getTrailArg();
+    if (!trailArg) {
+        return;
+    }
+    const DISTANCE = utils_1.getDistance(trailArg);
+    const twitterClientConfig = utils_1.getTwitterClientConfig(trailArg);
+    const client = new twitter_api_v2_1.default(twitterClientConfig);
+    for (let mile = 1; mile <= DISTANCE; mile++) {
         console.log(`Processing mile ${mile}`);
         const geojsonFilePath = utils_1.getFilePath('brp', mile, 'geojson');
         const file = fs_1.default.readFileSync(geojsonFilePath);
@@ -33,7 +32,7 @@ async function go() {
                     placeParts.push(geocodeItem.text);
                 }
             }
-            const mileageText = `Mile ${mile} of ${constants_1.DISTANCE_MILES.toLocaleString()}`;
+            const mileageText = `Mile ${mile} of ${DISTANCE.toLocaleString()}`;
             if (placeParts.length > 0) {
                 statusParts.push(`${mileageText}: ${placeParts.join(', ')}`);
             }

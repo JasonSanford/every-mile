@@ -45,4 +45,13 @@ const getMapId = (trailString: TrailString) => MAP_IDS[trailString];
 
 const getBufferDistance = (trailString: TrailString) => MAP_BUFFER_DISTANCES[trailString];
 
-export { getFilePath, metersToFeet, getTrailArg, getDistance, getMapId, getBufferDistance };
+const getTwitterClientConfig = (trailString: TrailString) => {
+  return {
+    appKey: process.env[`TWITTER_APP_KEY_${trailString}`] as string,
+    appSecret: process.env[`TWITTER_APP_SECRET_${trailString}`] as string,
+    accessToken: process.env[`TWITTER_ACCESS_TOKEN_${trailString}`] as string,
+    accessSecret: process.env[`TWITTER_ACCESS_SECRET_${trailString}`] as string
+  }
+};
+
+export { getFilePath, metersToFeet, getTrailArg, getDistance, getMapId, getBufferDistance, getTwitterClientConfig };

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBufferDistance = exports.getMapId = exports.getDistance = exports.getTrailArg = exports.metersToFeet = exports.getFilePath = void 0;
+exports.getTwitterClientConfig = exports.getBufferDistance = exports.getMapId = exports.getDistance = exports.getTrailArg = exports.metersToFeet = exports.getFilePath = void 0;
 const constants_1 = require("../constants");
 const trails = ['brp', 'at'];
 const isTrail = (x) => trails.includes(x);
@@ -42,3 +42,12 @@ const getMapId = (trailString) => constants_1.MAP_IDS[trailString];
 exports.getMapId = getMapId;
 const getBufferDistance = (trailString) => constants_1.MAP_BUFFER_DISTANCES[trailString];
 exports.getBufferDistance = getBufferDistance;
+const getTwitterClientConfig = (trailString) => {
+    return {
+        appKey: process.env[`TWITTER_APP_KEY_${trailString}`],
+        appSecret: process.env[`TWITTER_APP_SECRET_${trailString}`],
+        accessToken: process.env[`TWITTER_ACCESS_TOKEN_${trailString}`],
+        accessSecret: process.env[`TWITTER_ACCESS_SECRET_${trailString}`]
+    };
+};
+exports.getTwitterClientConfig = getTwitterClientConfig;

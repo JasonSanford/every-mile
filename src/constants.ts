@@ -1,5 +1,3 @@
-export const DISTANCE_MILES = 469;
-
 export const DISTANCES = {
   brp: 469,
   at: 2120

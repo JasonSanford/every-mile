@@ -2,24 +2,26 @@ import fs from 'fs';
 import TwitterApi from 'twitter-api-v2';
 import { config } from 'dotenv';
 
-import { DISTANCE_MILES } from '../constants';
-import { getFilePath, metersToFeet } from './utils';
+import { getFilePath, metersToFeet, getTrailArg, getDistance, getTwitterClientConfig } from './utils';
 
 config();
-
-const twitterClientConfig = {
-  appKey: process.env.TWITTER_APP_KEY as string,
-  appSecret: process.env.TWITTER_APP_SECRET as string,
-  accessToken: process.env.TWITTER_ACCESS_TOKEN as string,
-  accessSecret: process.env.TWITTER_ACCESS_SECRET as string
-};
-
-const client = new TwitterApi(twitterClientConfig);
 
 type MediaType = 'png' | 'gif';
 
 async function go() {
-  for (let mile = 1; mile <= DISTANCE_MILES; mile++) {
+  const trailArg = getTrailArg();
+
+  if (!trailArg) {
+    return;
+  }
+
+  const DISTANCE = getDistance(trailArg);
+
+  const twitterClientConfig = getTwitterClientConfig(trailArg);
+
+  const client = new TwitterApi(twitterClientConfig);
+
+  for (let mile = 1; mile <= DISTANCE; mile++) {
     console.log(`Processing mile ${mile}`);
 
     const geojsonFilePath = getFilePath('brp', mile, 'geojson');
@@ -39,7 +41,7 @@ async function go() {
         }
       }
 
-      const mileageText = `Mile ${mile} of ${DISTANCE_MILES.toLocaleString()}`
+      const mileageText = `Mile ${mile} of ${DISTANCE.toLocaleString()}`
       if (placeParts.length > 0) {
         statusParts.push(`${mileageText}: ${placeParts.join(', ')}`);
       } else {

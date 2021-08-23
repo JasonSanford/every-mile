@@ -7,4 +7,10 @@ declare const getTrailArg: () => TrailString | null;
 declare const getDistance: (trailString: TrailString) => number;
 declare const getMapId: (trailString: TrailString) => string;
 declare const getBufferDistance: (trailString: TrailString) => number;
-export { getFilePath, metersToFeet, getTrailArg, getDistance, getMapId, getBufferDistance };
+declare const getTwitterClientConfig: (trailString: TrailString) => {
+    appKey: string;
+    appSecret: string;
+    accessToken: string;
+    accessSecret: string;
+};
+export { getFilePath, metersToFeet, getTrailArg, getDistance, getMapId, getBufferDistance, getTwitterClientConfig };

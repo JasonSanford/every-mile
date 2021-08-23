@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MAPBOX_TOKEN = exports.MAP_BUFFER_DISTANCES = exports.MAP_IDS = exports.DISTANCES = exports.DISTANCE_MILES = void 0;
-exports.DISTANCE_MILES = 469;
+exports.MAPBOX_TOKEN = exports.MAP_BUFFER_DISTANCES = exports.MAP_IDS = exports.DISTANCES = void 0;
 exports.DISTANCES = {
     brp: 469,
     at: 2120

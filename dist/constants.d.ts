@@ -1,4 +1,3 @@
-export declare const DISTANCE_MILES = 469;
 export declare const DISTANCES: {
     brp: number;
     at: number;
