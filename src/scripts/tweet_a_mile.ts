@@ -67,7 +67,7 @@ async function go() {
         media = fs.readFileSync(mediaFilePath);
         mediaType = 'gif';
       } catch (error) {
-        // No gif
+        console.log('No gif found');
       }
 
       try {

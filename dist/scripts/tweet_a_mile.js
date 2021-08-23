@@ -55,7 +55,7 @@ async function go() {
                 mediaType = 'gif';
             }
             catch (error) {
-                // No gif
+                console.log('No gif found');
             }
             try {
                 const mediaId = await client.v1.uploadMedia(media, { type: mediaType });
