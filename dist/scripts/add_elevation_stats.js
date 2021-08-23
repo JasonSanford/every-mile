@@ -16,7 +16,7 @@ let lowestElevation = 999;
 let lowestElevationMile = 1;
 for (let mile = 1; mile <= constants_1.DISTANCE_MILES; mile++) {
     console.log(`Processing mile ${mile}`);
-    const filePath = utils_1.getFilePath(mile, 'geojson');
+    const filePath = utils_1.getFilePath('brp', mile, 'geojson');
     const file = fs_1.default.readFileSync(filePath);
     const section = JSON.parse(file.toString());
     const { elevations } = section.properties;

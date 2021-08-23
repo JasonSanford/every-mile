@@ -16,7 +16,7 @@ for (let mile = 1; mile <= DISTANCE_MILES; mile++) {
   tasks.push((cb: CB) => {
     setTimeout(async () => {
       console.log(`Processing mile ${mile}`);
-      const filePath = getFilePath(mile, 'geojson');
+      const filePath = getFilePath('brp', mile, 'geojson');
       const file = fs.readFileSync(filePath);
       const section = JSON.parse(file.toString());
       const response = await geocoder.reverseGeocode({query: section.geometry.coordinates[0]}).send();

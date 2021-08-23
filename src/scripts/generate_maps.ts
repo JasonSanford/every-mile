@@ -23,7 +23,7 @@ for (let mile = 401; mile <= DISTANCE_MILES; mile++) {
   tasks.push((cb: CB) => {
     setTimeout(async () => {
       console.log(`Processing mile ${mile}`);
-      const filePath = getFilePath(mile, 'geojson');
+      const filePath = getFilePath('brp', mile, 'geojson');
       const file = fs.readFileSync(filePath);
       const section = JSON.parse(file.toString());
       const bufferedLineAsPolygon = turfBuffer(section.geometry, 0.075);
@@ -35,7 +35,7 @@ for (let mile = 401; mile <= DISTANCE_MILES; mile++) {
       const url = `https://api.mapbox.com/styles/v1/${mapId}/static/${path}/auto/${dimensions}@2x?${(new URLSearchParams(params))}`;
       const response = await fetch(url);
       const buffer = await response.buffer();
-      fs.writeFileSync(getFilePath(mile, 'png'), buffer);
+      fs.writeFileSync(getFilePath('brp', mile, 'png'), buffer);
       cb(null, mile);
     }, 4000);
   });

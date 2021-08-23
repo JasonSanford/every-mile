@@ -6,7 +6,7 @@ import { getFilePath } from './utils';
 for (let mile = 1; mile <= DISTANCE_MILES; mile++) {
   console.log(`Processing mile ${mile}`);
 
-  const filePath = getFilePath(mile, 'geojson');
+  const filePath = getFilePath('brp', mile, 'geojson');
   const file = fs.readFileSync(filePath);
   const section = JSON.parse(file.toString());
   

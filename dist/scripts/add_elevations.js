@@ -13,7 +13,7 @@ for (let mile = 401; mile <= constants_1.DISTANCE_MILES; mile++) {
     tasks.push((cb) => {
         setTimeout(() => {
             console.log(`Processing mile ${mile}`);
-            const filePath = utils_1.getFilePath(mile, 'geojson');
+            const filePath = utils_1.getFilePath('brp', mile, 'geojson');
             const file = fs_1.default.readFileSync(filePath);
             const section = JSON.parse(file.toString());
             const elevationTasks = section.geometry.coordinates.map((coordinate) => {
