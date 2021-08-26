@@ -90,6 +90,8 @@ TWITTER_ACCESS_SECRET_brp=
 
 ### Posting
 
+This step assumes you have set up a new GitHub workflow at `/.github/workflows/{identfier}.yml` representing the new trail.
+
 The `tweet_a_mile` script takes care of posting to Twitter. This walks through each mile for a trail until it finds one where `trail.properties.has_tweeted` is falsey, which indicates this is the next trail to be posted. Once this mile section is determined other properties are checked for displaying location and elevation information. Then we find the corresponding map image (or gif, see below) that should be associated with the tweet, located in `/images/{identifier}/mile_{number}.png`.
 
 After a successful post, `trail.properties.has_tweeted` is set to `true` so we know not to tweet this mile again. Finally, the `Commit it` step in the [GitHub workflow](https://github.com/JasonSanford/every-mile/blob/adf7a377a625d7b91593658837e202f728d64318/.github/workflows/at.yml#L29) runs to commit this change, ensuring this mile is marked as having been tweeted and setting us up with clean repo to run again on schedule. See the GitHub actions workflow files (/.github/workflows/{identifier}.yml) for more details about this step.
