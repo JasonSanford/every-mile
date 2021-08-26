@@ -2,6 +2,8 @@
 
 A collection of twitter bots that sequentially post every mile of a trail, road, or path to Twitter.
 
+![](screenshots/tweet.jpg)
+
 ## Active Bots
 
 | Path | Distance |
