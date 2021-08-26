@@ -68,13 +68,31 @@ node dist/scripts/04_add_elevation_stats.js at
 
 #### `05_generate_maps`
 
-Using the same rate-limiting in the previous steps, iterate through each mile and use the Mapbox API to create a static map image and save to disk. The only interesting thing we are doing here is creating a small buffer around this LineString representation of a mile, creating a Polygon, and displaying that on the map. Each map image is saved to disk under `/images/{identifier}/mile_{number}.png`. It's easier to go ahead and pre-render these so that each Github action job runs quickly. After this step is done we're almost ready to post.
+Using the same rate-limiting in the previous steps, iterate through each mile and use the Mapbox API to create a static map image and save it to disk. The only interesting thing we are doing here is buffering the LineString representation of a mile to create a Polygon that highlights this specific mile. Each map image is saved to disk under `/images/{identifier}/mile_{number}.png`. It's easier to go ahead and pre-render these so that each Github action job runs quickly. After this step is done we're almost ready to post.
 
 A trail identifier must be passed as a parameter when running this script.
 
 ```sh
 node dist/scripts/05_generate_maps.js at
 ```
+
+#### Credentials
+
+You'll need 4 credentials for each bot, stored in a `.env` file. A `.env-sample` file is provided as an example. These values will automatically be read into environment variables at runtime for use in the Twitter client. Note the `_{identifier}` pattern after each of the 4 credentials. These should match the trail identifier value used in scripts and configuration files.
+
+```
+TWITTER_APP_KEY_brp=
+TWITTER_APP_SECRET_brp=
+TWITTER_ACCESS_TOKEN_brp=
+TWITTER_ACCESS_SECRET_brp=
+
+```
+
+### Posting
+
+The `tweet_a_mile` script takes care of posting to Twitter. This walks through each mile for a trail until it finds one where `trail.properties.has_tweeted` is falsey, which indicates this is the next trail to be posted. Once this mile section is determined other properties are checked for displaying location and elevation information. Then we find the corresponding map image (or gif, see below) that should be associated with the tweet, located in `/images/{identifier}/mile_{number}.png`.
+
+After a successful post, `trail.properties.has_tweeted` is set to `true` so we know not to tweet this mile again. Finally, the `Commit it` step in the [GitHub workflow](https://github.com/JasonSanford/every-mile/blob/adf7a377a625d7b91593658837e202f728d64318/.github/workflows/at.yml#L29) runs to commit this change, ensuring this mile is marked as having been tweeted and setting us up with clean repo to run again on schedule. See the GitHub actions workflow files (/.github/workflows/{identifier}.yml) for more details about this step.
 
 ## Extra
 
