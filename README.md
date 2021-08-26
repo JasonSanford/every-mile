@@ -21,7 +21,10 @@ A collection of twitter bots that sequentially post every mile of a trail, road,
 ## How it works
 
 ### Prepping a bot
-A series of scripts are run on a GeoJSON file representing the entire length of a trail. The following steps assume you have added a new trail's full geometry as `all.geojson` in the `/geom/{identifier}` directory, where `identifier` is a short string representing the trail's name (`at` => `Appalachian Trail`, `brp`, `Blue Ridge Parkway`).
+A series of scripts are run on a GeoJSON file representing the entire length of a trail. The following steps assume you have:
+
+1. added a new trail's full geometry as `all.geojson` in the `/geom/{identifier}` directory, where `identifier` is a short string representing the trail's name (`at` => `Appalachian Trail`, `brp` => `Blue Ridge Parkway`).
+2. Added constants for this new trail in `/src/constants.ts` including total trail distance, Mapbox map id, and mile indicator buffer (seen on images).
 
 #### `01_create_mile_sections`
 
@@ -52,3 +55,27 @@ A trail identifier must be passed as a parameter when running this script.
 ```sh
 node dist/scripts/03_add_elevations.js at
 ```
+
+#### `04_add_elevation_stats`
+
+This step simply uses the elevation data from the previous step and does some simple math to find minimum elevation, maximum elevation, and total elevation gain (or loss).
+
+A trail identifier must be passed as a parameter when running this script.
+
+```sh
+node dist/scripts/04_add_elevation_stats.js at
+```
+
+#### `05_generate_maps`
+
+Using the same rate-limiting in the previous steps, iterate through each mile and use the Mapbox API to create a static map image and save to disk. The only interesting thing we are doing here is creating a small buffer around this LineString representation of a mile, creating a Polygon, and displaying that on the map. Each map image is saved to disk under `/images/{identifier}/mile_{number}.png`. It's easier to go ahead and pre-render these so that each Github action job runs quickly. After this step is done we're almost ready to post.
+
+A trail identifier must be passed as a parameter when running this script.
+
+```sh
+node dist/scripts/05_generate_maps.js at
+```
+
+## Extra
+
+For each post the bot looks for a gif before the png. Some mile sections are particularly interesting and look great when animated. If a gif is found it takes priority and is shown instead of the png.
