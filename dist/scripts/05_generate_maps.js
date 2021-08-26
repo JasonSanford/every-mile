@@ -10,11 +10,11 @@ const buffer_1 = __importDefault(require("@turf/buffer"));
 const polygon_to_line_1 = require("@turf/polygon-to-line");
 const polyline_1 = __importDefault(require("@mapbox/polyline"));
 const utils_1 = require("./utils");
-const access_token = 'pk.eyJ1IjoiamNzYW5mb3JkIiwiYSI6ImNrZG1kdnU5NzE3bG4yenBkbzU5bDQ2NXMifQ.IMquilPKSANQDaSzf3fjcg';
+const constants_1 = require("../constants");
 const before_layer = 'contour-line';
 const padding = '100';
 const dimensions = '700x450';
-const params = { padding, before_layer, access_token };
+const params = { padding, before_layer, access_token: constants_1.MAPBOX_TOKEN };
 const go = () => {
     const trailArg = utils_1.getTrailArg();
     if (!trailArg) {
@@ -31,6 +31,9 @@ const go = () => {
                 const file = fs_1.default.readFileSync(filePath);
                 const section = JSON.parse(file.toString());
                 const bufferedLineAsPolygon = buffer_1.default(section.geometry, utils_1.getBufferDistance(trailArg));
+                // Some trails that snake back onto themselves and form a complex polygon
+                // break here, so make the buffer smaller until it works. 0.045 generally does
+                // const bufferedLineAsPolygon = turfBuffer(section.geometry, 0.045);
                 const bufferedLineAsLine = polygon_to_line_1.polygonToLine(bufferedLineAsPolygon);
                 const corrected = bufferedLineAsLine.geometry.coordinates.map(([lng, lat]) => [lat, lng]);
                 // eslint-disable-next-line

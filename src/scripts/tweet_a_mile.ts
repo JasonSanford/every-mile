@@ -27,8 +27,8 @@ async function go() {
     const geojsonFilePath = getFilePath(trailArg, mile, 'geojson');
     const file = fs.readFileSync(geojsonFilePath);
     const section = JSON.parse(file.toString());
-
     const { geocode, has_tweeted, elevation_difference, max_elevation } = section.properties;
+
     if (!has_tweeted) {
       console.log(`Tweet mile ${mile}`);
       const statusParts = [];
