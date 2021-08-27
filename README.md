@@ -55,6 +55,8 @@ Again, iterating each mile one at a time we `series` and `setTimeout` to rate-li
 A trail identifier must be passed as a parameter when running this script.
 
 ```sh
+mkdir tmp
+mkdir tmp/elevation_images
 node dist/scripts/03_add_elevations.js at
 ```
 
