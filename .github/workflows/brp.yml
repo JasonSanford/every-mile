@@ -18,6 +18,8 @@ jobs:
           ref: ${{ github.head_ref }}
       - name: Install it
         run: npm install
+      - name: Build it
+        run: npm run build
       - name: Config it
         run: |
           echo TWITTER_APP_KEY_brp=${{ secrets.TWITTER_APP_KEY_BRP }} > .env
