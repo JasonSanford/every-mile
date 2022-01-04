@@ -2,3 +2,5 @@ node_modules
 tmp
 .DS_Store
 .env
+dist/
+!.gitignore
