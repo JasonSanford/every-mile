@@ -8,7 +8,7 @@ export enum PathIdentifier {
   BlueRidgeParkway = 'brp',
 };
 
-export type PathAndMile = {
+export type PathIdetifierAndMile = {
   path: PathIdentifier,
   mile: number
-}
+};

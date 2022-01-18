@@ -1,16 +1,23 @@
-import { ParsedUrlQuery } from 'querystring'
+import { ParsedUrlQuery } from 'querystring';
 
-import { PathSlug, PathIdentifier, PathAndMile } from './types';
-import { DISTANCES } from './constants';
+import { PathSlug, PathIdentifier, PathIdetifierAndMile } from './types';
+import { DISTANCES, APPALACHIAN_TRAIL, BLUE_RIDGE_PARKWAY } from './constants';
 
 export const pathSlugToIdentifier = (pathSlug: PathSlug) => {
   return {
     'appalachian-trail': PathIdentifier.AppalachianTrail,
     'blue-ridge-parkway': PathIdentifier.BlueRidgeParkway,
   }[pathSlug];
-}
+};
 
-export const serializePathAndMile = (query: ParsedUrlQuery): PathAndMile | null => {
+export const pathIdentifierToName = (pathIdentifier: PathIdentifier) => {
+  return {
+    'at': APPALACHIAN_TRAIL,
+    'brp': BLUE_RIDGE_PARKWAY,
+  }[pathIdentifier];
+};
+
+export const serializePathIdentifierAndMile = (query: ParsedUrlQuery): PathIdetifierAndMile | null => {
   let { mile: mileString, path_slug: pathSlug } = query;
 
   if (pathSlug) {

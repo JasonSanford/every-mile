@@ -13,4 +13,7 @@ export const MAP_BUFFER_DISTANCES = {
   at: 0.05
 };
 
+export const APPALACHIAN_TRAIL = 'Appalachian Trail';
+export const BLUE_RIDGE_PARKWAY = 'Blue Ridge Parkway';
+
 export const MAPBOX_TOKEN = 'pk.eyJ1IjoiamNzYW5mb3JkIiwiYSI6ImNrcmYyejJwMzA1ZW0yb29kcGd2aXYzNm8ifQ.Xb6PPg3uG0WCgVffY1xTlg';
