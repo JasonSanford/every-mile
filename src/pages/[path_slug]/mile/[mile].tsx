@@ -2,6 +2,7 @@ import { GetStaticProps, GetServerSideProps, GetStaticPaths } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
+import { DISTANCES } from '../../../constants';
 import { serializePathIdentifierAndMile, pathIdentifierToName } from '../../../utils';
 
 const Mile = () => {
@@ -35,5 +36,25 @@ const Mile = () => {
     </>
   );
 };
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return new Promise((resolve) => {
+    const paths = [];
+
+    const atPaths = Array(DISTANCES.at).fill(1).map((_, index) => ( { params: { path_slug: 'appalachian-trail', mile: (index + 1).toString() }}));
+
+    paths.push(...atPaths);
+    resolve({
+      paths,
+      fallback: false
+    })
+  });
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  return {
+    props: {}
+  }
+}
 
 export default Mile;
