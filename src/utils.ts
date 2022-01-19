@@ -55,3 +55,25 @@ export const serializePathIdentifierAndMile = (query: ParsedUrlQuery): PathIdeti
     return null;
   }
 }
+
+export const serializePathIdentifier = (query: ParsedUrlQuery): PathIdentifier | null => {
+  let { path_slug: pathSlug } = query;
+
+  if (pathSlug) {
+    if (Array.isArray(pathSlug)) {
+      pathSlug = pathSlug.join('');
+    }
+  } else {
+    return null;
+  }
+  try {
+    if (!(<any>Object).values(PathSlug).includes(pathSlug)) {
+      return null;
+    }
+    const pathIdentifier = pathSlugToIdentifier(pathSlug as PathSlug);
+
+    return pathIdentifier;
+  } catch (e) {
+    return null;
+  }
+}
