@@ -129,8 +129,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
     const paths = [];
 
     const atPaths = Array(DISTANCES.at).fill(1).map((_, index) => ( { params: { path_slug: 'appalachian-trail', mile: (index + 1).toString() }}));
+    const brpPaths = Array(DISTANCES.brp).fill(1).map((_, index) => ( { params: { path_slug: 'blue-ridge-parkway', mile: (index + 1).toString() }}));
 
-    paths.push(...atPaths);
+    paths.push(...atPaths, ...brpPaths);
+
     resolve({
       paths,
       fallback: false
