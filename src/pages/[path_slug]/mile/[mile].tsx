@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import turfBuffer from '@turf/buffer';
 import mapboxgl, {LngLatLike, MapboxGeoJSONFeature } from 'mapbox-gl';
 
-import { DISTANCES } from '../../../constants';
+import { DISTANCES, MAP_IDS } from '../../../constants';
 import { serializePathIdentifierAndMile, pathIdentifierToName, getOgImageUrl } from '../../../utils';
 import { ParsedUrlQuery } from 'querystring';
 import { getFilePath, getBufferDistance } from '../../../scripts/utils';
@@ -55,7 +55,7 @@ const Mile = ({
     }
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: 'mapbox://styles/jcsanford/cks3bzm7c1ylb17nz0zp4fted',
+      style: `mapbox://styles/${MAP_IDS[path]}`,
       center: lineString.coordinates[0],
       zoom: 14
     });
