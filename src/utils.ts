@@ -1,5 +1,6 @@
 import { ParsedUrlQuery } from 'querystring';
 
+import { getDistance } from './scripts/utils';
 import { PathSlug, PathIdentifier, PathIdetifierAndMile } from './types';
 import { DISTANCES, APPALACHIAN_TRAIL, BLUE_RIDGE_PARKWAY } from './constants';
 
@@ -77,3 +78,9 @@ export const serializePathIdentifier = (query: ParsedUrlQuery): PathIdentifier |
     return null;
   }
 }
+
+export const getOgImageUrl = (pathIdentifier: PathIdentifier, mile: number) => {
+  const padAmount = getDistance(pathIdentifier).toString().length;
+  let fileName = `mile_${mile.toString().padStart(padAmount, '0')}.png`;
+  return `https://everymile.xyz/images/${pathIdentifier}/${fileName}`;
+};

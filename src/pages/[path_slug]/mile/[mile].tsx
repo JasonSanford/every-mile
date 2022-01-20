@@ -7,7 +7,7 @@ import turfBuffer from '@turf/buffer';
 import mapboxgl, {LngLatLike, MapboxGeoJSONFeature } from 'mapbox-gl';
 
 import { DISTANCES } from '../../../constants';
-import { serializePathIdentifierAndMile, pathIdentifierToName } from '../../../utils';
+import { serializePathIdentifierAndMile, pathIdentifierToName, getOgImageUrl } from '../../../utils';
 import { ParsedUrlQuery } from 'querystring';
 import { getFilePath, getBufferDistance } from '../../../scripts/utils';
 
@@ -106,6 +106,7 @@ const Mile = ({
     <>
       <Head>
         <title>Every Mile - {name} Mile {mile}</title>
+        <meta property="og:image" content={getOgImageUrl(path, mile)}/>
         <link href='https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css' rel='stylesheet' />
       </Head>
       <section className="py-20 bg-white">
