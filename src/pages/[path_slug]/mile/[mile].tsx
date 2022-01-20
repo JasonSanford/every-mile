@@ -3,22 +3,36 @@ import { useEffect, useRef } from 'react';
 import { GetStaticProps, GetServerSideProps, GetStaticPaths } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-// @ts-ignore
-import mapboxgl from '!mapbox-gl';
+import turfBuffer from '@turf/buffer';
+import mapboxgl, {LngLatLike, MapboxGeoJSONFeature } from 'mapbox-gl';
 
 import { DISTANCES } from '../../../constants';
 import { serializePathIdentifierAndMile, pathIdentifierToName } from '../../../utils';
 import { ParsedUrlQuery } from 'querystring';
-import { getFilePath } from '../../../scripts/utils';
+import { getFilePath, getBufferDistance } from '../../../scripts/utils';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiamNzYW5mb3JkIiwiYSI6ImNrZG1kdnU5NzE3bG4yenBkbzU5bDQ2NXMifQ.IMquilPKSANQDaSzf3fjcg';
 
+type LineString = {
+  type: string;
+  coordinates: LngLatLike[];
+}
+
+type PolygonFeature = {
+  type: 'Feature';
+  geometry: {
+    type: 'Polygon',
+    coordinates: LngLatLike[][]
+  };
+}
+
 type MileProps = {
-  coordinates: number[]
+  lineString: LineString;
+  buffer: MapboxGeoJSONFeature;
 };
 
 const Mile = ({
-  coordinates
+  lineString, buffer
 }: MileProps) => {
   const router = useRouter();
 
@@ -33,7 +47,7 @@ const Mile = ({
   const name = pathIdentifierToName(path);
 
   const mapContainer = useRef(null);
-  const map = useRef(null);
+  const map = useRef<mapboxgl.Map | null>(null);
   // const [lng, setLng] = useState(-70.9);
   // const [lat, setLat] = useState(42.35);
   // const [zoom, setZoom] = useState(9);
@@ -43,10 +57,52 @@ const Mile = ({
     }
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/outdoors-v11',
-      // center: [-70.9, 42.35],
-      center: coordinates,
+      style: 'mapbox://styles/jcsanford/cks3bzm7c1ylb17nz0zp4fted',
+      center: lineString.coordinates[0],
       zoom: 14
+    });
+
+    // @ts-ignore
+    map.current?.on('load', () => {
+      const bounds = new mapboxgl.LngLatBounds(
+        lineString.coordinates[0],
+        lineString.coordinates[0]
+      );
+
+      for (const coord of lineString.coordinates) {
+        bounds.extend(coord);
+      }
+
+      map.current?.addSource('mile', {
+        type: 'geojson',
+        // data: lineString,
+        data: buffer
+      });
+
+      map.current?.addLayer({
+        'id': 'mile-fill-layer',
+        'type': 'fill',
+        'source': 'mile',
+        'paint': {
+          'fill-opacity': 0.4,
+          'fill-color': '#e0e0e0',
+        }
+      });
+
+      map.current?.addLayer({
+        'id': 'mile-line-layer',
+        'type': 'line',
+        'source': 'mile',
+        'paint': {
+          'line-opacity': 1,
+          'line-color': '#999999',
+          'line-width': 2
+        }
+      });
+
+      map.current?.fitBounds(bounds, {
+        padding: 100
+      });
     });
   }, []);
 
@@ -89,23 +145,21 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const serialized = serializePathIdentifierAndMile(params as ParsedUrlQuery);
 
   if (serialized) {
-    console.log(serialized.mile);
     const path = getFilePath(serialized.path, serialized.mile, 'geojson');
     const file = fs.readFileSync(path);
     const section = JSON.parse(file.toString());
-    console.log(section.geometry.coordinates[0]);
+    const buffer = turfBuffer(section.geometry, getBufferDistance(serialized.path));
+    const { geometry: lineString } = section;
+
     return {
       props: {
-        coordinates: section.geometry.coordinates[0]
+        lineString,
+        buffer
       }
-    }
+    };
   }
-  console.log('slug', params?.path_slug)
-  return {
-    props: {
 
-    }
-  }
+  return { props: {} }
 }
 
 export default Mile;
