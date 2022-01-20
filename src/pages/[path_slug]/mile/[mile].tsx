@@ -52,7 +52,7 @@ const Mile = ({
   // const [lat, setLat] = useState(42.35);
   // const [zoom, setZoom] = useState(9);
   useEffect(() => {
-    if (map.current) {
+    if (map.current || !mapContainer.current) {
       return;
     }
     map.current = new mapboxgl.Map({
