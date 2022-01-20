@@ -6,7 +6,6 @@ import { serializePathIdentifier, pathIdentifierToName } from '../../utils';
 
 const Index = () => {
   const router = useRouter();
-  console.log('router.query', router.query);
 
   const pathIdentifier = serializePathIdentifier(router.query);
   
