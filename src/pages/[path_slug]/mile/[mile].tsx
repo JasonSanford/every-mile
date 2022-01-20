@@ -48,9 +48,7 @@ const Mile = ({
 
   const mapContainer = useRef(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  // const [lng, setLng] = useState(-70.9);
-  // const [lat, setLat] = useState(42.35);
-  // const [zoom, setZoom] = useState(9);
+
   useEffect(() => {
     if (map.current || !mapContainer.current) {
       return;
@@ -62,7 +60,6 @@ const Mile = ({
       zoom: 14
     });
 
-    // @ts-ignore
     map.current?.on('load', () => {
       const bounds = new mapboxgl.LngLatBounds(
         lineString.coordinates[0],
@@ -75,7 +72,6 @@ const Mile = ({
 
       map.current?.addSource('mile', {
         type: 'geojson',
-        // data: lineString,
         data: buffer
       });
 
