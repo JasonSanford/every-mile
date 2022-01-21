@@ -117,7 +117,7 @@ const Mile = ({
           <h2 className="text-3xl font-extrabold tracking-tight text-green-600 sm:text-4xl md:text-5xl xl:text-6xl">
             Mile {mile}
           </h2>
-          <div ref={mapContainer} className="map-container shadow-xl rounded-md mt-5 mb-10" style={{height: 'calc(100vh - 200px)'}}></div>
+          <div ref={mapContainer} className="map-container shadow-xl rounded-lg mt-5 mb-10" style={{height: 'calc(100vh - 200px)'}}></div>
         </div>
       </section>
     </>

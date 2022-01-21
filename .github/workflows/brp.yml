@@ -27,7 +27,7 @@ jobs:
           echo TWITTER_ACCESS_TOKEN_brp=${{ secrets.TWITTER_ACCESS_TOKEN_BRP }} >> .env
           echo TWITTER_ACCESS_SECRET_brp=${{ secrets.TWITTER_ACCESS_SECRET_BRP }} >> .env
       - name: Tweet it
-        run: node dist/scripts/tweet_a_mile.js brp
+        run: npx ts-node src/scripts/tweet_a_mile.ts brp
       - name: Commit it
         run: |
           git config --global user.name 'Jason Sanford'

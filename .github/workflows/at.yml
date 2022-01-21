@@ -27,7 +27,7 @@ jobs:
           echo TWITTER_ACCESS_TOKEN_at=${{ secrets.TWITTER_ACCESS_TOKEN_AT }} >> .env
           echo TWITTER_ACCESS_SECRET_at=${{ secrets.TWITTER_ACCESS_SECRET_AT }} >> .env
       - name: Tweet it
-        run: node dist/scripts/tweet_a_mile.js at
+        run: npx ts-node src/scripts/tweet_a_mile.ts at
       - name: Commit it
         run: |
           git config --global user.name 'Jason Sanford'
