@@ -22,13 +22,13 @@ const Index = () => {
       <Head>
         <title>Every Mile - {name}</title>
       </Head>
-      <section className="py-20 bg-white">
-      <div className="px-4 mx-auto text-center max-w-7xl sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-extrabold tracking-tight text-gray-700 sm:text-4xl md:text-5xl xl:text-6xl">
-          {name}
-        </h2>
-      </div>
-    </section>
+      <section className="">
+        <div className="px-4 mx-auto text-center max-w-7xl sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-extrabold tracking-tight text-gray-700 sm:text-4xl md:text-5xl xl:text-6xl">
+            {name}
+          </h2>
+        </div>
+      </section>
     </>
   );
 };
