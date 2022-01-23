@@ -18,6 +18,13 @@ export const pathIdentifierToName = (pathIdentifier: PathIdentifier) => {
   }[pathIdentifier];
 };
 
+export const pathIdentifierToSlug = (pathIdentifier: PathIdentifier) => {
+  return {
+    'at': 'appalachian-trail',
+    'brp': 'blue-ridge-parkway',
+  }[pathIdentifier];
+};
+
 export const serializePathIdentifierAndMile = (query: ParsedUrlQuery): PathIdetifierAndMile | null => {
   let { mile: mileString, path_slug: pathSlug } = query;
 
@@ -84,3 +91,14 @@ export const getOgImageUrl = (pathIdentifier: PathIdentifier, mile: number) => {
   let fileName = `mile_${mile.toString().padStart(padAmount, '0')}.png`;
   return `https://everymile.xyz/images/${pathIdentifier}/${fileName}`;
 };
+
+export const chunkify = (things: Array<any>, chunkSize: number) => {
+  const res = [];
+
+  for (let i = 0; i < things.length; i += chunkSize) {
+      const chunk = things.slice(i, i + chunkSize);
+      res.push(chunk);
+  }
+
+  return res;
+}

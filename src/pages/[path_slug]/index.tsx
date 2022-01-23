@@ -1,8 +1,10 @@
 // import { GetStaticProps, GetServerSideProps, GetStaticPaths } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
-import { serializePathIdentifier, pathIdentifierToName } from '../../utils';
+import { serializePathIdentifier, pathIdentifierToName, pathIdentifierToSlug, chunkify } from '../../utils';
+import { DISTANCES } from '../../constants';
 
 const Index = () => {
   const router = useRouter();
@@ -14,9 +16,12 @@ const Index = () => {
     return <p>nope</p>;
   }
   
-  // const { path, mile } = serialized;
   const name = pathIdentifierToName(pathIdentifier);
+  const slug = pathIdentifierToSlug(pathIdentifier);
+  const mileCount = DISTANCES[pathIdentifier];
 
+  const miles = Array(mileCount).fill(1).map((_, index) => index + 1);
+  const chunksOfMiles = chunkify(miles, 20);
   return (
     <>
       <Head>
@@ -29,6 +34,23 @@ const Index = () => {
           </h2>
         </div>
       </section>
+      <div className="md:container md:mx-auto mt-10">
+        {
+          chunksOfMiles.map(chunkOfMiles => (
+            <ul className="mb-10 columns-2 md:columns-4">
+              {
+                chunkOfMiles.map(mile => (
+                  <li key={`mile-${mile}`} className="text-center">
+                    <Link href={`/${slug}/mile/${mile}`}>
+                      <a className="hover:underline text-green-800">Mile {mile}</a>
+                    </Link>
+                  </li>
+                ))
+              }
+            </ul>
+          ))
+        }
+      </div>
     </>
   );
 };
