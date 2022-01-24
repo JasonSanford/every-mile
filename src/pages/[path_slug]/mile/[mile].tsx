@@ -69,10 +69,9 @@ const Mile = ({
   }
 
   useEffect(() => {
-    console.log('got ', buffer);
-    if (map.current || !mapContainer.current) {
-      return;
-    }
+    // if (map.current || !mapContainer.current) {
+    //   return;
+    // }
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: `mapbox://styles/${MAP_IDS[path]}`,
