@@ -87,9 +87,17 @@ export const serializePathIdentifier = (query: ParsedUrlQuery): PathIdentifier |
 }
 
 export const getOgImageUrl = (pathIdentifier: PathIdentifier, mile: number) => {
+  const rootUrl = process.env.NODE_ENV === 'production'
+    ? 'https://everymile.xyz'
+    : 'http://localhost:3000';
   const padAmount = getDistance(pathIdentifier).toString().length;
-  let fileName = `mile_${mile.toString().padStart(padAmount, '0')}.png`;
-  return `https://everymile.xyz/images/${pathIdentifier}/${fileName}`;
+  const fileName = `mile_${mile.toString().padStart(padAmount, '0')}.png`;
+  return `${rootUrl}/images/${pathIdentifier}/${fileName}`;
+};
+
+export const getMileUrl = (pathIdentifier: PathIdentifier, mile: number) => {
+  const slug = pathIdentifierToSlug(pathIdentifier);
+  return `/${slug}/mile/${mile}`;
 };
 
 export const chunkify = (things: Array<any>, chunkSize: number) => {

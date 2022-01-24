@@ -7,23 +7,16 @@ import turfBuffer from '@turf/buffer';
 import mapboxgl, {LngLatLike, MapboxGeoJSONFeature } from 'mapbox-gl';
 
 import { DISTANCES, MAP_IDS } from '../../../constants';
-import { serializePathIdentifierAndMile, pathIdentifierToName, getOgImageUrl } from '../../../utils';
+import { serializePathIdentifierAndMile, pathIdentifierToName, getOgImageUrl, getMileUrl } from '../../../utils';
 import { ParsedUrlQuery } from 'querystring';
 import { getFilePath, getBufferDistance } from '../../../scripts/utils';
+import Link from 'next/link';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiamNzYW5mb3JkIiwiYSI6ImNrZG1kdnU5NzE3bG4yenBkbzU5bDQ2NXMifQ.IMquilPKSANQDaSzf3fjcg';
 
 type LineString = {
   type: string;
   coordinates: LngLatLike[];
-}
-
-type PolygonFeature = {
-  type: 'Feature';
-  geometry: {
-    type: 'Polygon',
-    coordinates: LngLatLike[][]
-  };
 }
 
 type MileProps = {
@@ -49,7 +42,34 @@ const Mile = ({
   const mapContainer = useRef(null);
   const map = useRef<mapboxgl.Map | null>(null);
 
+  const adjacentMiles = [];
+
+  if (mile > 1) {
+    const previousMile = mile - 1;
+
+    adjacentMiles.push(
+      <Link href={getMileUrl(path, previousMile)}>
+        <button className="rounded-full">&larr; Previous Mile ({previousMile})</button>
+      </Link>
+    )
+  }
+
+  if (mile !== DISTANCES[path]) {
+    const nextMile = mile + 1;
+
+    adjacentMiles.push(
+      <Link href={getMileUrl(path, nextMile)}>
+        <button className="rounded-full">Next Mile ({nextMile}) &rarr;</button>
+      </Link>
+    )
+  }
+
+  if (adjacentMiles.length === 2) {
+    adjacentMiles.splice(1, 0, <span>&nbsp;|&nbsp;</span>);
+  }
+
   useEffect(() => {
+    console.log('got ', buffer);
     if (map.current || !mapContainer.current) {
       return;
     }
@@ -100,7 +120,7 @@ const Mile = ({
         padding: 100
       });
     });
-  }, []);
+  }, [mile, buffer]);
 
   return (
     <>
@@ -117,6 +137,9 @@ const Mile = ({
           <h2 className="text-3xl font-extrabold tracking-tight text-green-600 sm:text-4xl md:text-5xl xl:text-6xl">
             Mile {mile}
           </h2>
+          {
+            adjacentMiles
+          }
           <div ref={mapContainer} className="map-container shadow-xl rounded-lg mt-5 mb-10" style={{height: 'calc(100vh - 200px)'}}></div>
         </div>
       </section>
