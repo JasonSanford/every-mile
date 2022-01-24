@@ -73,6 +73,7 @@ const Mile = ({
     //   return;
     // }
     map.current = new mapboxgl.Map({
+      // @ts-ignore
       container: mapContainer.current,
       style: `mapbox://styles/${MAP_IDS[path]}`,
       center: lineString.coordinates[0],
@@ -89,10 +90,12 @@ const Mile = ({
         bounds.extend(coord);
       }
 
-      map.current?.addSource('mile', {
-        type: 'geojson',
-        data: buffer
-      });
+      if (!map.current?.getSource('mile')) {
+        map.current?.addSource('mile', {
+          type: 'geojson',
+          data: buffer
+        });
+      }
 
       map.current?.addLayer({
         'id': 'mile-fill-layer',
