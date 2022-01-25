@@ -4,6 +4,7 @@ import { config } from 'dotenv';
 
 import { getFilePath, metersToFeet, getTrailArg, getDistance, getTwitterClientConfig } from './utils';
 import { getMileUrl } from '../utils';
+import { PathIdentifier } from '../types';
 
 config();
 
@@ -58,7 +59,7 @@ async function go() {
       const maxElevMetersDisplay = parseInt(max_elevation.toFixed(0)).toLocaleString();
       statusParts.push(`Max elevation: ${maxElevFeetDisplay} ft (${maxElevMetersDisplay} m)`);
 
-      statusParts.push(getMileUrl);
+      statusParts.push(getMileUrl(PathIdentifier.AppalachianTrail, mile));
 
       const status = statusParts.join('\n');
       console.log(status);
