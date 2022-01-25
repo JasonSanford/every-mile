@@ -7,7 +7,7 @@ import turfBuffer from '@turf/buffer';
 import mapboxgl, { GeoJSONSource, LngLatLike, MapboxGeoJSONFeature } from 'mapbox-gl';
 
 import { DISTANCES, MAP_IDS } from '../../../constants';
-import { serializePathIdentifierAndMile, pathIdentifierToName, getOgImageUrl, getMileUrl } from '../../../utils';
+import { serializePathIdentifierAndMile, pathIdentifierToName, getOgImageUrl, getMilePath } from '../../../utils';
 import { ParsedUrlQuery } from 'querystring';
 import { getFilePath, getBufferDistance } from '../../../scripts/utils';
 import Link from 'next/link';
@@ -43,7 +43,7 @@ const Mile = ({
     const previousMile = mile - 1;
 
     adjacentMiles.push(
-      <Link href={getMileUrl(path, previousMile)}>
+      <Link href={getMilePath(path, previousMile)}>
         <button className="rounded-full">&larr; Previous Mile ({previousMile})</button>
       </Link>
     )
@@ -55,7 +55,7 @@ const Mile = ({
     const nextMile = mile + 1;
 
     adjacentMiles.push(
-      <Link href={getMileUrl(path, nextMile)}>
+      <Link href={getMilePath(path, nextMile)}>
         <button className="rounded-full">Next Mile ({nextMile}) &rarr;</button>
       </Link>
     )

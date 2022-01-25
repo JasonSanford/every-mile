@@ -95,9 +95,17 @@ export const getOgImageUrl = (pathIdentifier: PathIdentifier, mile: number) => {
   return `${rootUrl}/images/${pathIdentifier}/${fileName}`;
 };
 
-export const getMileUrl = (pathIdentifier: PathIdentifier, mile: number) => {
+export const getMilePath = (pathIdentifier: PathIdentifier, mile: number) => {
   const slug = pathIdentifierToSlug(pathIdentifier);
   return `/${slug}/mile/${mile}`;
+};
+
+export const getMileUrl = (pathIdentifier: PathIdentifier, mile: number) => {
+  const root = process.env.NODE_ENV === 'production'
+    ? 'https://everymile.xyz'
+    : 'http://localhost:3000';
+  const path = getMilePath(pathIdentifier, mile);
+  return `${root}/${path}`;
 };
 
 export const chunkify = (things: Array<any>, chunkSize: number) => {

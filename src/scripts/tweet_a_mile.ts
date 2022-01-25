@@ -3,6 +3,7 @@ import TwitterApi from 'twitter-api-v2';
 import { config } from 'dotenv';
 
 import { getFilePath, metersToFeet, getTrailArg, getDistance, getTwitterClientConfig } from './utils';
+import { getMileUrl } from '../utils';
 
 config();
 
@@ -57,30 +58,32 @@ async function go() {
       const maxElevMetersDisplay = parseInt(max_elevation.toFixed(0)).toLocaleString();
       statusParts.push(`Max elevation: ${maxElevFeetDisplay} ft (${maxElevMetersDisplay} m)`);
 
+      statusParts.push(getMileUrl);
+
       const status = statusParts.join('\n');
+      // console.log(status);
+      // let mediaFilePath = getFilePath(trailArg, mile, 'png');
+      // let media = fs.readFileSync(mediaFilePath);
+      // let mediaType: MediaType = 'png';
 
-      let mediaFilePath = getFilePath(trailArg, mile, 'png');
-      let media = fs.readFileSync(mediaFilePath);
-      let mediaType: MediaType = 'png';
+      // try {
+      //   mediaFilePath = getFilePath(trailArg, mile, 'gif');
+      //   media = fs.readFileSync(mediaFilePath);
+      //   mediaType = 'gif';
+      // } catch (error) {
+      //   console.log('No gif found');
+      // }
 
-      try {
-        mediaFilePath = getFilePath(trailArg, mile, 'gif');
-        media = fs.readFileSync(mediaFilePath);
-        mediaType = 'gif';
-      } catch (error) {
-        console.log('No gif found');
-      }
-
-      try {
-        const mediaId = await client.v1.uploadMedia(media, { type: mediaType });
-        const statusResponse = await client.v1.tweet(status, { media_ids: [mediaId] });
-        console.log(statusResponse);
-        section.properties.has_tweeted = true;
-        fs.writeFileSync(geojsonFilePath, JSON.stringify(section));
-      } catch (error) {
-        console.log('Error posting status');
-        console.error(error);
-      }
+      // try {
+      //   const mediaId = await client.v1.uploadMedia(media, { type: mediaType });
+      //   const statusResponse = await client.v1.tweet(status, { media_ids: [mediaId] });
+      //   console.log(statusResponse);
+      //   section.properties.has_tweeted = true;
+      //   fs.writeFileSync(geojsonFilePath, JSON.stringify(section));
+      // } catch (error) {
+      //   console.log('Error posting status');
+      //   console.error(error);
+      // }
 
       break;
     }
