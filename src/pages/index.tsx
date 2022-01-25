@@ -18,12 +18,12 @@ const Home: NextPage = () => {
         <div className={styles.grid}>
           <a href="/appalachian-trail" className={styles.card}>
             <h2>Appalachian Trail &rarr;</h2>
-            <p>Explore all 2,120 miles of the Appalachian Trail</p>
+            <p>Explore all 2,120 miles of the Appalachian Trail.</p>
           </a>
 
           <a href="/blue-ridge-parkway" className={styles.card}>
             <h2>Blue Ridge Parkway &rarr;</h2>
-            <p>Virtually cruise through 469 meandering miles</p>
+            <p>Virtually cruise through 469 meandering miles.</p>
           </a>
         </div>
       </main>
