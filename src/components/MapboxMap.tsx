@@ -29,7 +29,6 @@ const MapboxMap = ({
     const mapboxMap = new mapboxgl.Map({
       container: node,
       accessToken: 'pk.eyJ1IjoiamNzYW5mb3JkIiwiYSI6ImNrZG1kdnU5NzE3bG4yenBkbzU5bDQ2NXMifQ.IMquilPKSANQDaSzf3fjcg',
-      // style: styleId,
       center: [-74.5, 40],
       zoom: 9,
       ...initialOptions,

@@ -66,17 +66,6 @@ const Mile = ({
   }
 
   useEffect(() => {
-    // if (map.current || !mapContainer.current) {
-    //   return;
-    // }
-    // map.current = new mapboxgl.Map({
-    //   // @ts-ignore
-    //   container: mapContainer.current,
-    //   style: `mapbox://styles/${MAP_IDS[path]}`,
-    //   center: lineString.coordinates[0],
-    //   zoom: 14
-    // });
-
     if (map) {
       const bounds = new mapboxgl.LngLatBounds(
         lineString.coordinates[0],
@@ -100,8 +89,6 @@ const Mile = ({
       }
 
       const currentFillLayer = map.getLayer('mile-fill-layer');
-      const currentLineLayer = map.getLayer('mile-line-layer');
-
       if (!currentFillLayer) {
         map.addLayer({
           'id': 'mile-fill-layer',
@@ -114,6 +101,7 @@ const Mile = ({
         });
       }
 
+      const currentLineLayer = map.getLayer('mile-line-layer');
       if (!currentLineLayer) {
         map.addLayer({
           'id': 'mile-line-layer',
@@ -127,7 +115,7 @@ const Mile = ({
         });
       }
     }
-  }, [lineString, buffer]);
+  }, [map, lineString, buffer]);
 
   return (
     <>
