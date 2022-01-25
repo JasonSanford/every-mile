@@ -35,7 +35,7 @@ This walks the entire trail geometry mile-by-mile and creates `.geojson` files f
 A trail identifier must be passed as a parameter when running this script.
 
 ```sh
-node dist/scripts/01_create_mile_sections.js at
+npx ts-node src/scripts/01_create_mile_sections.ts at
 ```
 
 #### `02_add_city_property`
@@ -45,7 +45,7 @@ This iterates every mile of the trail by reading its GeoJSON Feature (`/geom/{id
 A trail identifier must be passed as a parameter when running this script.
 
 ```sh
-node dist/scripts/02_add_city_property.js at
+npx ts-node src/scripts/02_add_city_property.ts at
 ```
 
 #### `03_add_elevations`
@@ -57,7 +57,7 @@ A trail identifier must be passed as a parameter when running this script.
 ```sh
 mkdir tmp
 mkdir tmp/elevation_images
-node dist/scripts/03_add_elevations.js at
+npx ts-node src/scripts/03_add_elevations.ts at
 ```
 
 #### `04_add_elevation_stats`
@@ -67,7 +67,7 @@ This step simply uses the elevation data from the previous step and does some si
 A trail identifier must be passed as a parameter when running this script.
 
 ```sh
-node dist/scripts/04_add_elevation_stats.js at
+npx ts-node src/scripts/04_add_elevation_stats.ts at
 ```
 
 #### `05_generate_maps`
@@ -77,7 +77,7 @@ Using the same rate-limiting in the previous steps, iterate through each mile an
 A trail identifier must be passed as a parameter when running this script.
 
 ```sh
-node dist/scripts/05_generate_maps.js at
+npx ts-node src/scripts/05_generate_maps.ts at
 ```
 
 #### Credentials

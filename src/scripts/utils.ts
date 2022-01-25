@@ -7,7 +7,7 @@ const isTrail = (x: any): x is TrailString => trails.includes(x);
 
 const extensionDirMap = {
   geojson: 'geom',
-  png: 'images',
+  png: 'public/images',
   gif: 'images',
 };
 

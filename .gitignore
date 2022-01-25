@@ -4,3 +4,6 @@ tmp
 .env
 dist/
 !.gitignore
+# next.js
+.next/
+out/
