@@ -101,11 +101,11 @@ export const getMilePath = (pathIdentifier: PathIdentifier, mile: number) => {
 };
 
 export const getMileUrl = (pathIdentifier: PathIdentifier, mile: number) => {
-  const root = process.env.NODE_ENV === 'production'
+  const root = process.env.GITHUB_ACTIONS === 'true'
     ? 'https://everymile.xyz'
     : 'http://localhost:3000';
   const path = getMilePath(pathIdentifier, mile);
-  return `${root}/${path}`;
+  return `${root}${path}`;
 };
 
 export const chunkify = (things: Array<any>, chunkSize: number) => {
