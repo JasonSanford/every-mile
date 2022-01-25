@@ -2,6 +2,7 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { GetStaticProps, GetStaticPaths } from 'next';
 
 import { serializePathIdentifier, pathIdentifierToName, pathIdentifierToSlug, chunkify } from '../../utils';
 import { DISTANCES } from '../../constants';
@@ -54,5 +55,23 @@ const Index = () => {
     </>
   );
 };
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return new Promise((resolve) => {
+    const paths = [
+      { params: { path_slug: 'appalachian-trail'} },
+      { params: { path_slug: 'blue-ridge-parkway'} },
+    ];
+
+    resolve({
+      paths,
+      fallback: false
+    })
+  });
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  return { props: {} }
+}
 
 export default Index;
