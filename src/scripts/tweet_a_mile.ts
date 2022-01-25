@@ -61,7 +61,7 @@ async function go() {
       statusParts.push(getMileUrl);
 
       const status = statusParts.join('\n');
-      // console.log(status);
+      console.log(status);
       // let mediaFilePath = getFilePath(trailArg, mile, 'png');
       // let media = fs.readFileSync(mediaFilePath);
       // let mediaType: MediaType = 'png';
