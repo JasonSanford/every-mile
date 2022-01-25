@@ -1,18 +1,17 @@
 import fs from 'fs';
-import { useEffect, useRef } from 'react';
-import { GetStaticProps, GetServerSideProps, GetStaticPaths } from 'next';
+import { useEffect, useState } from 'react';
+import { GetStaticProps, GetStaticPaths } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import turfBuffer from '@turf/buffer';
-import mapboxgl, {LngLatLike, MapboxGeoJSONFeature } from 'mapbox-gl';
+import mapboxgl, { GeoJSONSource, LngLatLike, MapboxGeoJSONFeature } from 'mapbox-gl';
 
 import { DISTANCES, MAP_IDS } from '../../../constants';
 import { serializePathIdentifierAndMile, pathIdentifierToName, getOgImageUrl, getMileUrl } from '../../../utils';
 import { ParsedUrlQuery } from 'querystring';
 import { getFilePath, getBufferDistance } from '../../../scripts/utils';
 import Link from 'next/link';
-
-mapboxgl.accessToken = 'pk.eyJ1IjoiamNzYW5mb3JkIiwiYSI6ImNrZG1kdnU5NzE3bG4yenBkbzU5bDQ2NXMifQ.IMquilPKSANQDaSzf3fjcg';
+import MapboxMap from '../../../components/MapboxMap';
 
 type LineString = {
   type: string;
@@ -28,7 +27,6 @@ const Mile = ({
   lineString, buffer
 }: MileProps) => {
   const router = useRouter();
-
   const serialized = serializePathIdentifierAndMile(router.query);
   
   if (!serialized) {
@@ -38,9 +36,6 @@ const Mile = ({
   
   const { path, mile } = serialized;
   const name = pathIdentifierToName(path);
-
-  const mapContainer = useRef(null);
-  const map = useRef<mapboxgl.Map | null>(null);
 
   const adjacentMiles = [];
 
@@ -53,6 +48,8 @@ const Mile = ({
       </Link>
     )
   }
+
+  const [map, setMap] = useState<mapboxgl.Map | null>(null);
 
   if (mile !== DISTANCES[path]) {
     const nextMile = mile + 1;
@@ -72,15 +69,15 @@ const Mile = ({
     // if (map.current || !mapContainer.current) {
     //   return;
     // }
-    map.current = new mapboxgl.Map({
-      // @ts-ignore
-      container: mapContainer.current,
-      style: `mapbox://styles/${MAP_IDS[path]}`,
-      center: lineString.coordinates[0],
-      zoom: 14
-    });
+    // map.current = new mapboxgl.Map({
+    //   // @ts-ignore
+    //   container: mapContainer.current,
+    //   style: `mapbox://styles/${MAP_IDS[path]}`,
+    //   center: lineString.coordinates[0],
+    //   zoom: 14
+    // });
 
-    map.current?.on('load', () => {
+    if (map) {
       const bounds = new mapboxgl.LngLatBounds(
         lineString.coordinates[0],
         lineString.coordinates[0]
@@ -90,46 +87,53 @@ const Mile = ({
         bounds.extend(coord);
       }
 
-      if (!map.current?.getSource('mile')) {
-        map.current?.addSource('mile', {
+      map.fitBounds(bounds, { padding: 100 });
+
+      const currentSource = map.getSource('mile');
+      if (currentSource) {
+        (currentSource as GeoJSONSource).setData(buffer);
+      } else {
+        map.addSource('mile', {
           type: 'geojson',
           data: buffer
         });
       }
 
-      map.current?.addLayer({
-        'id': 'mile-fill-layer',
-        'type': 'fill',
-        'source': 'mile',
-        'paint': {
-          'fill-opacity': 0.4,
-          'fill-color': '#e0e0e0',
-        }
-      });
+      const currentFillLayer = map.getLayer('mile-fill-layer');
+      const currentLineLayer = map.getLayer('mile-line-layer');
 
-      map.current?.addLayer({
-        'id': 'mile-line-layer',
-        'type': 'line',
-        'source': 'mile',
-        'paint': {
-          'line-opacity': 1,
-          'line-color': '#999999',
-          'line-width': 2
-        }
-      });
+      if (!currentFillLayer) {
+        map.addLayer({
+          'id': 'mile-fill-layer',
+          'type': 'fill',
+          'source': 'mile',
+          'paint': {
+            'fill-opacity': 0.4,
+            'fill-color': '#e0e0e0',
+          }
+        });
+      }
 
-      map.current?.fitBounds(bounds, {
-        padding: 100
-      });
-    });
-  }, [mile, buffer]);
+      if (!currentLineLayer) {
+        map.addLayer({
+          'id': 'mile-line-layer',
+          'type': 'line',
+          'source': 'mile',
+          'paint': {
+            'line-opacity': 1,
+            'line-color': '#999999',
+            'line-width': 2
+          }
+        });
+      }
+    }
+  }, [lineString, buffer]);
 
   return (
     <>
       <Head>
         <title>Every Mile - {name} Mile {mile}</title>
         <meta property="og:image" content={getOgImageUrl(path, mile)}/>
-        <link href='https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css' rel='stylesheet' />
       </Head>
       <section className="">
         <div className="px-4 mx-auto text-center max-w-7xl sm:px-6 lg:px-8">
@@ -142,7 +146,16 @@ const Mile = ({
           {
             adjacentMiles
           }
-          <div ref={mapContainer} className="map-container shadow-xl rounded-lg mt-5 mb-10" style={{height: 'calc(100vh - 200px)'}}></div>
+          <div className="map-container shadow-xl rounded-lg mt-5 mb-10" style={{height: 'calc(100vh - 200px)'}}>
+            <MapboxMap
+              initialOptions={{
+                center: lineString.coordinates[0],
+                zoom: 14,
+                style: `mapbox://styles/${MAP_IDS[path]}`
+              }}
+              onLoaded={(map) => setMap(map)}
+            />
+          </div>
         </div>
       </section>
     </>
