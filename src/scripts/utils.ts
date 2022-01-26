@@ -1,5 +1,6 @@
 import { TwitterApiTokens } from 'twitter-api-v2';
 import { DISTANCES, MAP_BUFFER_DISTANCES, MAP_IDS } from '../constants';
+import { PathIdentifier } from '../types';
 const trails = ['brp', 'at'] as const;
 export type TrailString = (typeof trails)[number];
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,11 +32,11 @@ const metersToFeet = (meters: number): number => {
   return meters * 3.28084;
 };
 
-const getTrailArg = (): TrailString | null => {
+const getTrailArg = (): PathIdentifier | null => {
   try {
     const arg = process.argv.slice(2)[0];
     if (isTrail(arg)) {
-      return arg;
+      return arg as PathIdentifier;
     }
     return null;
   } catch (error) {

@@ -4,7 +4,6 @@ import { config } from 'dotenv';
 
 import { getFilePath, metersToFeet, getTrailArg, getDistance, getTwitterClientConfig, getNextMileFilePath } from './utils';
 import { getMileUrl } from '../utils';
-import { PathIdentifier } from '../types';
 import { DISTANCES } from '../constants';
 
 config();
