@@ -66,7 +66,7 @@ async function go() {
   const maxElevMetersDisplay = parseInt(max_elevation.toFixed(0)).toLocaleString();
   statusParts.push(`Max elevation: ${maxElevFeetDisplay} ft (${maxElevMetersDisplay} m)`);
 
-  statusParts.push(getMileUrl(PathIdentifier.AppalachianTrail, mile));
+  statusParts.push(getMileUrl(trailArg, mile));
 
   const status = statusParts.join('\n');
 
