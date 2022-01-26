@@ -96,7 +96,7 @@ const Mile = ({
           'source': 'mile',
           'paint': {
             'fill-opacity': 0.4,
-            'fill-color': '#e0e0e0',
+            'fill-color': '#999999',
           }
         });
       }
