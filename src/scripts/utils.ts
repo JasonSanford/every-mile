@@ -13,6 +13,8 @@ const extensionDirMap = {
 
 type Extension = 'geojson' | 'png' | 'gif';
 
+export const getNextMileFilePath = (trailString: TrailString) => `./next_mile_${trailString}.txt`;
+
 const getFilePath = (trailString: TrailString, mile: number | 'all', extension: Extension): string => {
   const directory = extensionDirMap[extension];
   const padAmount = getDistance(trailString).toString().length;
