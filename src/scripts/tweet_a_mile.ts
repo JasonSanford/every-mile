@@ -66,6 +66,7 @@ async function go() {
   statusParts.push(`Max elevation: ${maxElevFeetDisplay} ft (${maxElevMetersDisplay} m)`);
 
   statusParts.push(getMileUrl(trailArg, mile));
+  statusParts.push('@theTrekAT @thetrek_ @BackpackerPod @AT_Conservancy');
 
   const status = statusParts.join('\n');
 
