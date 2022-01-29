@@ -12,3 +12,8 @@ export type PathIdetifierAndMile = {
   path: PathIdentifier,
   mile: number
 };
+
+export type GeocodePart = {
+  id: string;
+  text: string;
+};

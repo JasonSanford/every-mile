@@ -7,11 +7,12 @@ import turfBuffer from '@turf/buffer';
 import mapboxgl, { GeoJSONSource, LngLatLike, MapboxGeoJSONFeature } from 'mapbox-gl';
 
 import { DISTANCES, MAP_IDS } from '../../../constants';
-import { serializePathIdentifierAndMile, pathIdentifierToName, getOgImageUrl, getMilePath } from '../../../utils';
+import { serializePathIdentifierAndMile, pathIdentifierToName, getOgImageUrl, getMilePath, geocodeToLocationString } from '../../../utils';
 import { ParsedUrlQuery } from 'querystring';
-import { getFilePath, getBufferDistance } from '../../../scripts/utils';
+import { getFilePath, getBufferDistance, metersToFeet } from '../../../scripts/utils';
 import Link from 'next/link';
 import MapboxMap from '../../../components/MapboxMap';
+import { GeocodePart } from '../../../types';
 
 type LineString = {
   type: string;
@@ -21,10 +22,14 @@ type LineString = {
 type MileProps = {
   lineString: LineString;
   buffer: MapboxGeoJSONFeature;
+  geocode: GeocodePart[];
+  minElevation: number;
+  maxElevation: number;
+  diffElevation: number;
 };
 
 const Mile = ({
-  lineString, buffer
+  lineString, buffer, geocode, minElevation, maxElevation, diffElevation
 }: MileProps) => {
   const router = useRouter();
   const serialized = serializePathIdentifierAndMile(router.query);
@@ -117,6 +122,12 @@ const Mile = ({
     }
   }, [map, lineString, buffer]);
 
+  const elevGainFeetDisplay = parseInt(metersToFeet(diffElevation).toFixed(), 10).toLocaleString();
+  const elevGainMetersDisplay = parseInt(diffElevation.toFixed()).toLocaleString();
+
+  const maxElevFeetDisplay = parseInt(metersToFeet(maxElevation).toFixed(0)).toLocaleString();
+  const maxElevMetersDisplay = parseInt(maxElevation.toFixed(0)).toLocaleString();
+
   return (
     <>
       <Head>
@@ -131,9 +142,12 @@ const Mile = ({
           <h2 className="text-3xl font-extrabold tracking-tight text-green-600 sm:text-4xl md:text-5xl xl:text-6xl">
             Mile {mile}
           </h2>
-          {
-            adjacentMiles
-          }
+          <div className="mt-5">
+            {
+              adjacentMiles
+            }
+          </div>
+          <p className="mt-5 md:w-1/2 mx-auto">Mile {mile} of the {name} is located near <strong>{geocodeToLocationString(geocode)}</strong>. It has an elevation change of <strong>{elevGainFeetDisplay} ft ({elevGainMetersDisplay} m)</strong> with a maximum elevation of <strong>{maxElevFeetDisplay} ft ({maxElevMetersDisplay} m)</strong>.</p>
           <div className="map-container shadow-xl rounded-lg mt-5 mb-10" style={{height: 'calc(100vh - 200px)'}}>
             <MapboxMap
               initialOptions={{
@@ -174,12 +188,16 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     const file = fs.readFileSync(path);
     const section = JSON.parse(file.toString());
     const buffer = turfBuffer(section.geometry, getBufferDistance(serialized.path));
-    const { geometry: lineString } = section;
+    const { geometry: lineString, properties } = section;
 
     return {
       props: {
         lineString,
-        buffer
+        buffer,
+        geocode: properties.geocode,
+        minElevation: properties.min_elevation,
+        maxElevation: properties.max_elevation,
+        diffElevation: properties.elevation_difference
       }
     };
   }

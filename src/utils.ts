@@ -1,7 +1,7 @@
 import { ParsedUrlQuery } from 'querystring';
 
 import { getDistance } from './scripts/utils';
-import { PathSlug, PathIdentifier, PathIdetifierAndMile } from './types';
+import { PathSlug, PathIdentifier, PathIdetifierAndMile, GeocodePart } from './types';
 import { DISTANCES, APPALACHIAN_TRAIL, BLUE_RIDGE_PARKWAY } from './constants';
 
 export const pathSlugToIdentifier = (pathSlug: PathSlug) => {
@@ -118,3 +118,21 @@ export const chunkify = (things: Array<any>, chunkSize: number) => {
 
   return res;
 }
+
+export const geocodeToLocationString = (geocode: GeocodePart[]): string | null => {
+  const locationParts = [];
+
+  for (let i = 0; i < geocode.length; i++) {
+    const geocodePart = geocode[i];
+
+    if (geocodePart.id.includes('place') || geocodePart.id.includes('region')) {
+      locationParts.push(geocodePart.text);
+    }
+  }
+
+  if (locationParts.length > 0) {
+    return locationParts.join(', ');
+  }
+
+  return null;
+};
