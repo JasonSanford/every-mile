@@ -3,13 +3,12 @@ import { useEffect, useState } from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import turfBuffer from '@turf/buffer';
 import mapboxgl, { GeoJSONSource, LngLatLike, MapboxGeoJSONFeature } from 'mapbox-gl';
 
 import { DISTANCES, MAP_IDS } from '../../../constants';
 import { serializePathIdentifierAndMile, pathIdentifierToName, getOgImageUrl, getMilePath, geocodeToLocationString } from '../../../utils';
 import { ParsedUrlQuery } from 'querystring';
-import { getFilePath, getBufferDistance, metersToFeet } from '../../../scripts/utils';
+import { getFilePath, metersToFeet } from '../../../scripts/utils';
 import Link from 'next/link';
 import MapboxMap from '../../../components/MapboxMap';
 import { GeocodePart } from '../../../types';
@@ -20,8 +19,7 @@ type LineString = {
 }
 
 type MileProps = {
-  lineString: LineString;
-  buffer: MapboxGeoJSONFeature;
+  section: MapboxGeoJSONFeature,
   geocode: GeocodePart[];
   minElevation: number;
   maxElevation: number;
@@ -29,8 +27,9 @@ type MileProps = {
 };
 
 const Mile = ({
-  lineString, buffer, geocode, minElevation, maxElevation, diffElevation
+  section, geocode, maxElevation, diffElevation
 }: MileProps) => {
+  const geometry = (section.geometry as LineString);
   const router = useRouter();
   const serialized = serializePathIdentifierAndMile(router.query);
   
@@ -73,11 +72,11 @@ const Mile = ({
   useEffect(() => {
     if (map) {
       const bounds = new mapboxgl.LngLatBounds(
-        lineString.coordinates[0],
-        lineString.coordinates[0]
+        geometry.coordinates[0],
+        geometry.coordinates[0]
       );
 
-      for (const coord of lineString.coordinates) {
+      for (const coord of geometry.coordinates) {
         bounds.extend(coord);
       }
 
@@ -85,24 +84,11 @@ const Mile = ({
 
       const currentSource = map.getSource('mile');
       if (currentSource) {
-        (currentSource as GeoJSONSource).setData(buffer);
+        (currentSource as GeoJSONSource).setData(section);
       } else {
         map.addSource('mile', {
           type: 'geojson',
-          data: buffer
-        });
-      }
-
-      const currentFillLayer = map.getLayer('mile-fill-layer');
-      if (!currentFillLayer) {
-        map.addLayer({
-          'id': 'mile-fill-layer',
-          'type': 'fill',
-          'source': 'mile',
-          'paint': {
-            'fill-opacity': 0.4,
-            'fill-color': '#999999',
-          }
+          data: section
         });
       }
 
@@ -112,15 +98,38 @@ const Mile = ({
           'id': 'mile-line-layer',
           'type': 'line',
           'source': 'mile',
+          'layout': {
+            'line-cap': 'round',
+            'line-join': 'round',
+          },
           'paint': {
             'line-opacity': 1,
-            'line-color': '#999999',
-            'line-width': 2
+            'line-color': '#04b262',
+            'line-width': 12,
           }
         });
       }
+
+      const currentFillLayer = map.getLayer('mile-fill-layer');
+      if (!currentFillLayer) {
+        map.addLayer({
+          id: 'mile-fill-layer',
+          type: 'symbol',
+          source: 'mile',
+          layout: {
+            'icon-allow-overlap': true,
+            'icon-ignore-placement': true,
+            'icon-image': ['image', 'direction-marker'],
+            'icon-rotate': 90,
+            'symbol-placement': 'line',
+            'symbol-spacing': 30,
+            'icon-size': 0.8
+          },
+          paint: {}
+        })
+      }
     }
-  }, [map, lineString, buffer]);
+  }, [map, section]);
 
   const elevGainFeetDisplay = parseInt(metersToFeet(diffElevation).toFixed(), 10).toLocaleString();
   const elevGainMetersDisplay = parseInt(diffElevation.toFixed()).toLocaleString();
@@ -151,11 +160,19 @@ const Mile = ({
           <div className="map-container shadow-xl rounded-lg mt-5 mb-10" style={{height: 'calc(100vh - 200px)'}}>
             <MapboxMap
               initialOptions={{
-                center: lineString.coordinates[0],
+                center: geometry.coordinates[0],
                 zoom: 14,
                 style: `mapbox://styles/${MAP_IDS[path]}`
               }}
-              onLoaded={(map) => setMap(map)}
+              onLoaded={(map) => {
+                setMap(map);
+                map.loadImage('https://www.everymile.xyz/images/chevron.png', (error, image) => {
+                  if (error || !image) {
+                    return;
+                  };
+                  map.addImage('direction-marker', image);
+                });
+              }}
             />
           </div>
         </div>
@@ -187,13 +204,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     const path = getFilePath(serialized.path, serialized.mile, 'geojson');
     const file = fs.readFileSync(path);
     const section = JSON.parse(file.toString());
-    const buffer = turfBuffer(section.geometry, getBufferDistance(serialized.path));
-    const { geometry: lineString, properties } = section;
+    const { properties } = section;
 
     return {
       props: {
-        lineString,
-        buffer,
+        section,
         geocode: properties.geocode,
         minElevation: properties.min_elevation,
         maxElevation: properties.max_elevation,
