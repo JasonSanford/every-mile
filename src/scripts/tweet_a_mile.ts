@@ -26,11 +26,11 @@ async function go() {
   const nextMileFilePath = getNextMileFilePath(trailArg);
 
   const file = fs.readFileSync(nextMileFilePath);
-  const mile = JSON.parse(file.toString());
+  let mile = JSON.parse(file.toString());
 
   if (mile > DISTANCES[trailArg]) {
     console.log('We have reached the end');
-    return;
+    mile = 1;
   }
 
   console.log(`Processing mile ${mile}`);
