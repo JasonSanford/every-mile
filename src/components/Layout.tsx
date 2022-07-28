@@ -15,7 +15,6 @@ const Layout: NextPage = ({ children }) => {
       <main className={`w-full ${styles.main}`}>
         {children}
       </main>
-      <Script src='https://analytics.jsanford.dev/umami.js' />
     </>
   )
 };
