@@ -1,9 +1,9 @@
-import * as React from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import * as React from "react";
+import mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 interface MapboxMapProps {
-  initialOptions?: Omit<mapboxgl.MapboxOptions, 'container'>;
+  initialOptions?: Omit<mapboxgl.MapboxOptions, "container">;
   onCreated?(map: mapboxgl.Map): void;
   onLoaded?(map: mapboxgl.Map): void;
   onRemoved?(): void;
@@ -22,13 +22,14 @@ const MapboxMap = ({
   React.useEffect(() => {
     const node = mapNode.current;
 
-    if (typeof window === 'undefined' || node === null) {
+    if (typeof window === "undefined" || node === null) {
       return;
     }
 
     const mapboxMap = new mapboxgl.Map({
       container: node,
-      accessToken: 'pk.eyJ1IjoiamNzYW5mb3JkIiwiYSI6ImNrZG1kdnU5NzE3bG4yenBkbzU5bDQ2NXMifQ.IMquilPKSANQDaSzf3fjcg',
+      accessToken:
+        "pk.eyJ1IjoiamNzYW5mb3JkIiwiYSI6ImNsemFxbW05dTBqdmQycXB5b2N4MWU5NXMifQ.f4eUiQzyqstYdO34HqldEw",
       center: [-74.5, 40],
       zoom: 9,
       ...initialOptions,
@@ -38,7 +39,7 @@ const MapboxMap = ({
     if (onCreated) onCreated(mapboxMap);
 
     if (onLoaded) {
-      mapboxMap.once('load', () => onLoaded(mapboxMap));
+      mapboxMap.once("load", () => onLoaded(mapboxMap));
     }
 
     return () => {
@@ -51,7 +52,7 @@ const MapboxMap = ({
     };
   }, []);
 
-  return <div ref={mapNode} style={{ width: '100%', height: '100%' }} />;
-}
+  return <div ref={mapNode} style={{ width: "100%", height: "100%" }} />;
+};
 
 export default MapboxMap;
