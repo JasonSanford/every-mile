@@ -40,13 +40,13 @@ const go = () => {
         const filePath = getFilePath(trailArg, mile, "geojson");
         const file = fs.readFileSync(filePath);
         const section = JSON.parse(file.toString());
-        // const bufferedLineAsPolygon = turfBuffer(
-        //   section.geometry,
-        //   getBufferDistance(trailArg)
-        // );
+        const bufferedLineAsPolygon = turfBuffer(
+          section.geometry,
+          getBufferDistance(trailArg)
+        );
         // Some trails that snake back onto themselves and form a complex polygon
         // break here, so make the buffer smaller until it works. 0.045 generally does
-        const bufferedLineAsPolygon = turfBuffer(section.geometry, 0.045);
+        // const bufferedLineAsPolygon = turfBuffer(section.geometry, 0.045);
         const bufferedLineAsLine = polygonToLine(bufferedLineAsPolygon);
         const corrected = bufferedLineAsLine.geometry.coordinates.map(
           ([lng, lat]) => [lat, lng]
