@@ -7,12 +7,18 @@ import {
   PathIdetifierAndMile,
   GeocodePart,
 } from "./types";
-import { DISTANCES, APPALACHIAN_TRAIL, BLUE_RIDGE_PARKWAY } from "./constants";
+import {
+  DISTANCES,
+  APPALACHIAN_TRAIL,
+  BLUE_RIDGE_PARKWAY,
+  CONTINENTAL_DIVIDE_TRAIL,
+} from "./constants";
 
 export const pathSlugToIdentifier = (pathSlug: PathSlug) => {
   return {
     "appalachian-trail": PathIdentifier.AppalachianTrail,
     "blue-ridge-parkway": PathIdentifier.BlueRidgeParkway,
+    "continental-divide-trail": PathIdentifier.ContinentalDivideTrail,
   }[pathSlug];
 };
 
@@ -20,6 +26,7 @@ export const pathIdentifierToName = (pathIdentifier: PathIdentifier) => {
   return {
     at: APPALACHIAN_TRAIL,
     brp: BLUE_RIDGE_PARKWAY,
+    cdt: CONTINENTAL_DIVIDE_TRAIL,
   }[pathIdentifier];
 };
 
@@ -27,6 +34,7 @@ export const pathIdentifierToSlug = (pathIdentifier: PathIdentifier) => {
   return {
     at: "appalachian-trail",
     brp: "blue-ridge-parkway",
+    cdt: "continental-divide-trail",
   }[pathIdentifier];
 };
 
