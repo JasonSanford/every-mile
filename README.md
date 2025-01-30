@@ -8,16 +8,16 @@ A collection of twitter bots that sequentially post every mile of a trail, road,
 
 | Path | Distance |
 | ----------- | ----------- |
-| [Appalachian Trail](https://twitter.com/every_mile_at) | 2120 |
-| [Blue Ridge Parkway](https://twitter.com/every_mile_brp) | 469 |
+| [Appalachian Trail](https://x.com/every_mile_at) | 2120 |
+| [Blue Ridge Parkway](https://x.com/every_mile_brp) | 469 |
 
 
-<a href="https://twitter.com/every_mile_brp">
-  <img alt="Twitter Follow badge" src="https://img.shields.io/twitter/url?label=%40every_mile_brp&style=social&url=https%3A%2F%2Ftwitter.com%2Fevery_mile_brp">
+<a href="https://x.com/every_mile_brp">
+  <img alt="X Follow badge" src="https://img.shields.io/twitter/url?label=%40every_mile_brp&style=social&url=https%3A%2F%2Ftx.com%2Fevery_mile_brp">
 </a>
 
-<a href="https://twitter.com/every_mile_at">
-  <img alt="Twitter Follow badge" src="https://img.shields.io/twitter/url?label=%40every_mile_at&style=social&url=https%3A%2F%2Ftwitter.com%2Fevery_mile_at">
+<a href="https://x.com/every_mile_at">
+  <img alt="Twitter Follow badge" src="https://img.shields.io/twitter/url?label=%40every_mile_at&style=social&url=https%3A%2F%2Fx.com%2Fevery_mile_at">
 </a>
 
 ## How it works
@@ -96,7 +96,7 @@ TWITTER_ACCESS_SECRET_brp=
 
 This step assumes you have set up a new GitHub workflow at `/.github/workflows/{identfier}.yml` representing the new trail.
 
-The `tweet_a_mile` script takes care of posting to Twitter. This walks through each mile for a trail until it finds one where `trail.properties.has_tweeted` is falsey, which indicates this is the next trail to be posted. Once this mile section is determined other properties are checked for displaying location and elevation information. Then we find the corresponding map image (or gif, see below) that should be associated with the tweet, located in `/images/{identifier}/mile_{number}.png`.
+The `tweet_a_mile` script takes care of posting to 𝕏. This walks through each mile for a trail until it finds one where `trail.properties.has_tweeted` is falsey, which indicates this is the next trail to be posted. Once this mile section is determined other properties are checked for displaying location and elevation information. Then we find the corresponding map image (or gif, see below) that should be associated with the tweet, located in `/images/{identifier}/mile_{number}.png`.
 
 After a successful post, `trail.properties.has_tweeted` is set to `true` so we know not to tweet this mile again. Finally, the `Commit it` step in the [GitHub workflow](https://github.com/JasonSanford/every-mile/blob/adf7a377a625d7b91593658837e202f728d64318/.github/workflows/at.yml#L29) runs to commit this change, ensuring this mile is marked as having been tweeted and setting us up with clean repo to run again on schedule. See the GitHub actions workflow files (/.github/workflows/{identifier}.yml) for more details about this step.
 
