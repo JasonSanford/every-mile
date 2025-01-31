@@ -28,6 +28,10 @@ async function go() {
 
   const twitterClientConfig = getTwitterClientConfig(trailArg);
 
+  Object.entries(twitterClientConfig).forEach(([key, value]) => {
+    console.log(`${key}: Length ${value.length}`);
+  });
+
   const client = new TwitterApi(twitterClientConfig);
 
   const nextMileFilePath = getNextMileFilePath(trailArg);
