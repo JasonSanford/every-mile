@@ -44,7 +44,10 @@ const Index = () => {
       </section>
       <div className="md:container md:mx-auto mt-10">
         {chunksOfMiles.map((chunkOfMiles) => (
-          <ul className="mb-10 columns-2 md:columns-4">
+          <ul
+            key={`chunk-of-miles-${chunkOfMiles[0]}`}
+            className="mb-10 columns-2 md:columns-4"
+          >
             {chunkOfMiles.map((mile) => (
               <li key={`mile-${mile}`} className="text-center">
                 <Link href={`/${slug}/mile/${mile}`}>
