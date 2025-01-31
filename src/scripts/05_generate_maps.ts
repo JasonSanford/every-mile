@@ -33,7 +33,7 @@ const go = () => {
 
   const tasks = [];
 
-  for (let mile = 1; mile <= DISTANCE; mile++) {
+  for (let mile = 101; mile <= 200; mile++) {
     tasks.push((cb: CB) => {
       setTimeout(async () => {
         console.log(`Processing mile ${mile}`);

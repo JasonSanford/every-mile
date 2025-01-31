@@ -1,0 +1,37 @@
+name: Continental Divide Trail
+
+on:
+  schedule:
+    - cron: '0 15,18 * * *'
+  workflow_dispatch:
+
+jobs:
+  tweet:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node it
+        uses: actions/setup-node@v2
+        with:
+          cache: 'npm'
+          ref: ${{ github.head_ref }}
+      - name: Install it
+        run: npm install
+      - name: Build it
+        run: npm run build
+      - name: Config it
+        run: |
+          echo TWITTER_APP_KEY_cdt=${{ secrets.TWITTER_APP_KEY_CDT }} > .env
+          echo TWITTER_APP_SECRET_cdt=${{ secrets.TWITTER_APP_SECRET_CDT }} >> .env
+          echo TWITTER_ACCESS_TOKEN_cdt=${{ secrets.TWITTER_ACCESS_TOKEN_CDT }} >> .env
+          echo TWITTER_ACCESS_SECRET_cdt=${{ secrets.TWITTER_ACCESS_SECRET_CDT }} >> .env
+      - name: Tweet it
+        run: npx ts-node src/scripts/tweet_a_mile.ts cdt
+      - name: Commit it
+        run: |
+          git config --global user.name 'Jason Sanford'
+          git config --global user.email 'jasonsanford@gmail.com'
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git commit -am "Tweeted Continental Divide Trail"
+          git push

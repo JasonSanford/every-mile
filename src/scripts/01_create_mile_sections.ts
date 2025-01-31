@@ -1,20 +1,20 @@
-import fs from 'fs';
-import along from '@turf/along';
-import split from '@turf/line-split';
+import fs from "fs";
+import along from "@turf/along";
+import split from "@turf/line-split";
 
-import { getFilePath, getTrailArg, getDistance } from './utils';
-
+import { getFilePath, getTrailArg, getDistance } from "./utils";
 
 const go = () => {
   const trailArg = getTrailArg();
 
   if (!trailArg) {
+    console.error("No trail argument provided");
     return;
   }
 
   const DISTANCE = getDistance(trailArg);
 
-  const fileBuffer = fs.readFileSync(getFilePath(trailArg, 'all', 'geojson'));
+  const fileBuffer = fs.readFileSync(getFilePath(trailArg, "all", "geojson"));
   const all = JSON.parse(fileBuffer.toString());
 
   let mile = 1;
@@ -22,15 +22,37 @@ const go = () => {
   let currentSection = null;
 
   while (mile <= DISTANCE) {
-    console.log(mile);
+    console.log(`Processing mile ${mile}`);
 
-    const splitPoint = along(all, mile, { units: 'miles' });
-    [currentSection, nextSection] = split(nextSection, splitPoint).features;
+    try {
+      const splitPoint = along(all, mile, { units: "miles" });
+      const splitResult = split(nextSection, splitPoint);
 
-    fs.writeFileSync(getFilePath(trailArg, mile, 'geojson'), JSON.stringify(currentSection));
+      if (
+        !splitResult ||
+        !splitResult.features ||
+        splitResult.features.length !== 2
+      ) {
+        console.error(
+          `Failed to split at mile ${mile}. Split result:`,
+          splitResult
+        );
+        break;
+      }
 
-    currentSection = nextSection;
-    mile++;
+      [currentSection, nextSection] = splitResult.features;
+
+      fs.writeFileSync(
+        getFilePath(trailArg, mile, "geojson"),
+        JSON.stringify(currentSection)
+      );
+
+      currentSection = nextSection;
+      mile++;
+    } catch (error) {
+      console.error(`Error processing mile ${mile}:`, error);
+      break;
+    }
   }
 };
 

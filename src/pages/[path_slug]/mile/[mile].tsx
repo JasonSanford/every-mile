@@ -247,8 +247,16 @@ export const getStaticPaths: GetStaticPaths = async () => {
           mile: (index + 1).toString(),
         },
       }));
+    const cdtPaths = Array(DISTANCES.cdt)
+      .fill(1)
+      .map((_, index) => ({
+        params: {
+          path_slug: "continental-divide-trail",
+          mile: (index + 1).toString(),
+        },
+      }));
 
-    paths.push(...atPaths, ...brpPaths);
+    paths.push(...atPaths, ...brpPaths, ...cdtPaths);
 
     resolve({
       paths,

@@ -1,10 +1,10 @@
-import fs from 'fs';
+import fs from "fs";
 
-import tilebelt from '@mapbox/tilebelt';
-import getPixels from 'get-pixels';
-import fetch from 'node-fetch';
+import tilebelt from "@mapbox/tilebelt";
+import getPixels from "get-pixels";
+import fetch from "node-fetch";
 
-import { MAPBOX_TOKEN } from './constants';
+import { MAPBOX_TOKEN } from "./constants";
 
 const Z = 15;
 
@@ -17,12 +17,12 @@ const getImageTile = async (x: number, y: number) => {
   const filePath = getImageFilePath(x, y);
 
   if (fs.existsSync(filePath)) {
-    // console.log('Cache hit');
+    // console.log("Cache hit");
     // fs.readFileSync(filePath);
     return;
   }
 
-  console.log('Cache miss', filePath);
+  console.log("Cache miss", filePath);
   const urlFileName = `${Z}/${x}/${y}.pngraw`;
   const url = `https://api.mapbox.com/v4/mapbox.terrain-rgb/${urlFileName}?access_token=${MAPBOX_TOKEN}`;
   const response = await fetch(url);
@@ -31,7 +31,10 @@ const getImageTile = async (x: number, y: number) => {
   fs.writeFileSync(filePath, buffer);
 };
 
-async function getElevation(latitude: number, longitude: number): Promise<number> {
+async function getElevation(
+  latitude: number,
+  longitude: number
+): Promise<number> {
   return new Promise(async (resolve, reject) => {
     const tileFraction = tilebelt.pointToTileFraction(longitude, latitude, Z);
     const tile = tileFraction.map(Math.floor);
@@ -40,7 +43,7 @@ async function getElevation(latitude: number, longitude: number): Promise<number
     await getImageTile(x, y);
 
     // Stolen from https://www.npmjs.com/package/mapbox-elevation
-    getPixels(getImageFilePath(x, y), 'image/png', (err, pixels) => {
+    getPixels(getImageFilePath(x, y), "image/png", (err, pixels) => {
       if (err) {
         reject(err);
       }
@@ -54,7 +57,7 @@ async function getElevation(latitude: number, longitude: number): Promise<number
       const green = pixels.get(x, y, 1);
       const blue = pixels.get(x, y, 2);
 
-      const height = -10000 + ((red * 256 * 256 + green * 256 + blue) * 0.1);
+      const height = -10000 + (red * 256 * 256 + green * 256 + blue) * 0.1;
 
       resolve(height);
     });

@@ -1,10 +1,10 @@
-import fs from 'fs';
+import fs from "fs";
 
-import { series } from 'async';
-import Geocoder from '@mapbox/mapbox-sdk/services/geocoding';
+import { series } from "async";
+import Geocoder from "@mapbox/mapbox-sdk/services/geocoding";
 
-import { MAPBOX_TOKEN } from '../constants';
-import { getFilePath, getTrailArg, getDistance } from './utils';
+import { MAPBOX_TOKEN } from "../constants";
+import { getFilePath, getTrailArg, getDistance } from "./utils";
 
 const geocoder = Geocoder({ accessToken: MAPBOX_TOKEN });
 
@@ -21,24 +21,26 @@ const go = () => {
 
   const tasks = [];
 
-  for (let mile = 1; mile <= DISTANCE; mile++) {
+  for (let mile = 2001; mile <= DISTANCE; mile++) {
     tasks.push((cb: CB) => {
       setTimeout(async () => {
         console.log(`Processing mile ${mile}`);
-        const filePath = getFilePath(trailArg, mile, 'geojson');
+        const filePath = getFilePath(trailArg, mile, "geojson");
         const file = fs.readFileSync(filePath);
         const section = JSON.parse(file.toString());
-        const response = await geocoder.reverseGeocode({query: section.geometry.coordinates[0]}).send();
+        const response = await geocoder
+          .reverseGeocode({ query: section.geometry.coordinates[0] })
+          .send();
         section.properties.geocode = response.body.features;
         fs.writeFileSync(filePath, JSON.stringify(section));
         cb(null, mile);
-      }, 4000);
+      }, 1000);
     });
   }
 
   series(tasks, (error, results) => {
     if (error) {
-      console.log('errror', error);
+      console.log("errror", error);
       return;
     }
 
