@@ -39,6 +39,13 @@ const Home: NextPage = () => {
               <p>Virtually cruise through 469 meandering miles.</p>
             </a>
           </Link>
+
+          <Link href="/continental-divide-trail">
+            <a className={styles.card}>
+              <h2>Continental Divide Trail &rarr;</h2>
+              <p>Explore 3,010 miles of the Continental Divide Trail.</p>
+            </a>
+          </Link>
         </div>
 
         <div className={styles.grid}>
