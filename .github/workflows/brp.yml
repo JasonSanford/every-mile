@@ -10,12 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Node it
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
         with:
-          cache: 'npm'
           ref: ${{ github.head_ref }}
+      - name: Node it
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
       - name: Install it
         run: npm install
       - name: Build it
