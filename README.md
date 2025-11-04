@@ -103,3 +103,5 @@ After a successful post, `trail.properties.has_tweeted` is set to `true` so we k
 ## Extra
 
 For each post the bot looks for a gif before the png. Some mile sections are particularly interesting and look great when animated. If a gif is found it takes priority and is shown instead of the png.
+
+touch 1
