@@ -175,16 +175,19 @@ const Mile = ({ section, geocode, maxElevation, diffElevation }: MileProps) => {
         </title>
         <meta property="og:image" content={getOgImageUrl(path, mile)} />
       </Head>
-      <section className="">
-        <div className="px-4 mx-auto text-center max-w-7xl sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-extrabold tracking-tight text-gray-700 sm:text-4xl md:text-5xl xl:text-6xl">
+      <section
+        className="flex flex-col overflow-hidden"
+        style={{ height: "calc(100vh - 64px)" }}
+      >
+        <div className="px-4 mx-auto text-center max-w-7xl sm:px-6 lg:px-8 flex-shrink-0 py-4">
+          <h2 className="text-2xl font-extrabold tracking-tight text-gray-700 sm:text-3xl md:text-4xl">
             {name}
           </h2>
-          <h2 className="text-3xl font-extrabold tracking-tight text-green-600 sm:text-4xl md:text-5xl xl:text-6xl">
+          <h2 className="text-2xl font-extrabold tracking-tight text-green-600 sm:text-3xl md:text-4xl">
             Mile {mile}
           </h2>
-          <div className="mt-5">{adjacentMiles}</div>
-          <p className="mt-5 md:w-1/2 mx-auto">
+          <div className="mt-3">{adjacentMiles}</div>
+          <p className="mt-3 md:w-1/2 mx-auto text-sm sm:text-base">
             Mile {mile} of the {name} is located near{" "}
             <strong>{geocodeToLocationString(geocode)}</strong>. It has an
             elevation change of{" "}
@@ -197,10 +200,9 @@ const Mile = ({ section, geocode, maxElevation, diffElevation }: MileProps) => {
             </strong>
             .
           </p>
-          <div
-            className="map-container shadow-xl rounded-lg mt-5 mb-10"
-            style={{ height: "calc(100vh - 200px)" }}
-          >
+        </div>
+        <div className="flex-1 px-4 pb-4 mx-auto max-w-7xl sm:px-6 lg:px-8 w-full overflow-hidden">
+          <div className="map-container h-full">
             <MapboxMap
               initialOptions={{
                 center: geometry.coordinates[0],
